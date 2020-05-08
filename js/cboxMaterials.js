@@ -1,4 +1,8 @@
-// scene/demo-specific variables go here
+/**
+ * @author Erich Loftis / https://github.com/erichlof
+ */
+
+ // scene/demo-specific variables go here
 var EPS_intersect;
 var sceneIsDynamic = false;
 var camFlightSpeed = 300;

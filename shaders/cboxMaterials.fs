@@ -1,5 +1,9 @@
 #version 300 es
 
+/**
+ * @author Erich Loftis / https://github.com/erichlof
+ */
+
 precision highp float;
 precision highp int;
 precision highp sampler2D;
