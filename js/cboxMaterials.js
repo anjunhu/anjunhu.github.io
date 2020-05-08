@@ -157,7 +157,13 @@ function init_GUI() {
                         //showJoystick: true,
                         guiDomElement: gui.domElement,
                         enableMultiTouch: true
-                });	
+                });
+                
+                mobileJoystickControlsL = new MobileJoystickControls ({
+                        //showJoystick: true,
+                        guiDomElement: guiL.domElement,
+                        enableMultiTouch: true
+                });
         }
 
         if (mouseControl) {
@@ -201,6 +207,12 @@ function init_GUI() {
                                 ableToEngagePointerLock = false;	
                 }, false);
                 gui.domElement.addEventListener("mouseleave", function(event) {
+                                ableToEngagePointerLock = true;
+                }, false);
+                guiL.domElement.addEventListener("mouseenter", function(event) {
+                        ableToEngagePointerLock = false;	
+                }, false);
+                guiL.domElement.addEventListener("mouseleave", function(event) {
                                 ableToEngagePointerLock = true;
                 }, false);
         }
