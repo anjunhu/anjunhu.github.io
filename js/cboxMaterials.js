@@ -7,6 +7,7 @@ var EPS_intersect;
 var sceneIsDynamic = false;
 var camFlightSpeed = 300;
 
+var on_initiation = false;
 var modelMesh;
 var modelScale = 1.0;
 var modelPositionOffset = new THREE.Vector3();
@@ -47,6 +48,8 @@ var changeLMaterialColor = false;
 var changeRMaterialColor = false;
 var changeLMesh = false;
 var changeRMesh = false;
+var changeLMesh = false;
+var changeRMesh = false;
 var changeLRoughness = false;
 var changeRRoughness = false;
 var LGeometry, LMesh;
@@ -55,7 +58,9 @@ var RGeometry, RMesh;
 
 function init_GUI() {
 
-        meshes_text = ['Sphere', 'Box', 'Teapot', 'Bunny', 'Dragon'];
+        Lmeshes_text = ['Teapot', 'Bunny', 'Dragon'];
+        Rmeshes_text = ['Sphere'];
+
 
         materials_lookup = {
                 Diffuse: 1,
@@ -68,12 +73,12 @@ function init_GUI() {
         };
 
         mesh_default = {
-                LMesh: 'Bunny',
+                LMesh: 'Teapot',
                 RMesh: 'Sphere'
         };
 
         material_TypeObject = {
-                LMaterial: 4,
+                LMaterial: 3,
                 RMaterial: 2
         };
         material_ColorObject = {
@@ -122,8 +127,8 @@ function init_GUI() {
         material_LColorController = guiL.addColor( material_ColorObject, 'LColor' ).onChange( LMatColorChanger );
         material_RColorController = gui.addColor( material_ColorObject, 'RColor' ).onChange( RMatColorChanger );
 
-        material_LMeshController = guiL.add( mesh_default, 'LMesh', meshes_text ).onChange( LMeshChanger );
-        material_RMeshController = gui.add( mesh_default, 'RMesh', meshes_text ).onChange( RMeshChanger );
+        LMeshController = guiL.add( mesh_default, 'LMesh', Lmeshes_text ).onChange( LMeshChanger );
+        RMeshController = gui.add( mesh_default, 'RMesh', Rmeshes_text ).onChange( RMeshChanger );
 
         LMatTypeChanger();
         RMatTypeChanger();
@@ -255,14 +260,29 @@ function MaterialObject() {
         }
         
         
-function load_GLTF_Model() {
+function load_GLTF_Model(gltfFilename) {
         
         var gltfLoader = new THREE.GLTFLoader();
         //var objmtlLoader = new THREE.OBJMTLLoader();
+        on_initiation = false;
 
 
-        gltfLoader.load("models/Bunny.glb", function( meshGroup ) { // Triangles: 30,338
-        //gltfLoader.load("models/Dragon.glb", function( meshGroup ) { // Triangles: 100,000
+        if (gltfFilename == undefined){
+                gltfFilename = 'Teapot.glb';
+                on_initiation = true;
+        }
+
+        triangleMaterialMarkers = [];
+        pathTracingMaterialList = [];
+        uniqueMaterialTextures = [];
+        meshList = [];
+        geoList = [];
+
+        gltfLoader.load("models/".concat(gltfFilename), function( meshGroup ) { // Triangles: 30,338
+        
+        console.log('on_initiation:');
+        console.log(on_initiation);
+
 
                 if (meshGroup.scene) 
                         meshGroup = meshGroup.scene;
@@ -332,16 +352,32 @@ function load_GLTF_Model() {
                 //modelScale = 0.1;
                 //modelPositionOffset.set(0, 20, -30);
 
-                // settings for StanfordBunny model
-		modelScale = 0.5;
-                modelPositionOffset.set(150.0, 115.0, -200.0);
-                
-                // settings for StanfordDragon model
-		// modelScale = 30;
-		// modelPositionOffset.set(200, 200, 200);
-                
+                // if (gltfFilename.includes('Bunny')){
+                //         modelScale = 0.6;
+                //         modelPositionOffset.set(175.0, 145.0, -350.0);
+                // }
+		
+                if (gltfFilename.includes('Bunny')){
+                        modelScale = 0.5;
+                        modelPositionOffset.set(150.0, 115.0, -200.0);
+                }
+		
+                if (gltfFilename.includes('Dragon')){
+                        modelScale = 25;
+                        modelPositionOffset.set(200.0, 125.0, -375.0);
+                }
+
+                if (gltfFilename.includes('Teapot')){
+                        modelScale = 11;
+                        modelPositionOffset.set(200.0, 90.0, -325.0);
+                }
                 // now that the models have been loaded, we can init (with GUI for this demo)
-                init_GUI();
+                if (on_initiation){
+                        init_GUI();
+                }
+                else{
+                        initSceneData();
+                }
 
         });
 
@@ -351,49 +387,51 @@ function load_GLTF_Model() {
 // called automatically from within initTHREEjs() function
 function initSceneData() {
         
-        // scene/demo-specific three.js objects setup goes here
-        EPS_intersect = mouseControl ? 0.01 : 1.0; // less precision on mobile
+        if (on_initiation){
+                // scene/demo-specific three.js objects setup goes here
+                EPS_intersect = mouseControl ? 0.01 : 1.0; // less precision on mobile
 
-        // Boxes
-        LGeometry = new THREE.BoxGeometry(1,1,1);
-        LMaterial = new THREE.MeshPhysicalMaterial( {
-                color: new THREE.Color(0.95, 0.95, 0.95), //RGB, ranging from 0.0 - 1.0
-                roughness: 1.0 // ideal Diffuse material	
-        } );
-        
-        LMesh = new THREE.Mesh(LGeometry, LMaterial);
-        pathTracingScene.add(LMesh);
-        LMesh.visible = false; // disable normal Three.js rendering updates of this object: 
-        // it is just a data placeholder as well as an Object3D that can be transformed/manipulated by 
-        // using familiar Three.js library commands. It is then fed into the GPU path tracing renderer
-        // thRoughness its 'matrixWorld' matrix. See below:
-        LMesh.rotation.set(0, Math.PI * 0.1, 0);
-        LMesh.position.set(180, 170, -350);
-        LMesh.updateMatrixWorld(true); // 'true' forces immediate matrix update
-        
-        
-        RGeometry = new THREE.BoxGeometry(1,1,1);
-        RMaterial = new THREE.MeshPhysicalMaterial( {
-                color: new THREE.Color(0.95, 0.95, 0.95), //RGB, ranging from 0.0 - 1.0
-                roughness: 1.0 // ideal Diffuse material	
-        } );
-        
-        RMesh = new THREE.Mesh(RGeometry, RMaterial);
-        pathTracingScene.add(RMesh);
-        RMesh.visible = false;
-        RMesh.rotation.set(0, -Math.PI * 0.09, 0);
-        RMesh.position.set(370, 85, -170);
-        RMesh.updateMatrixWorld(true); // 'true' forces immediate matrix update
+                // Boxes
+                LGeometry = new THREE.BoxGeometry(1,1,1);
+                LMaterial = new THREE.MeshPhysicalMaterial( {
+                        color: new THREE.Color(0.95, 0.95, 0.95), //RGB, ranging from 0.0 - 1.0
+                        roughness: 1.0 // ideal Diffuse material	
+                } );
+                
+                LMesh = new THREE.Mesh(LGeometry, LMaterial);
+                pathTracingScene.add(LMesh);
+                LMesh.visible = false; // disable normal Three.js rendering updates of this object: 
+                // it is just a data placeholder as well as an Object3D that can be transformed/manipulated by 
+                // using familiar Three.js library commands. It is then fed into the GPU path tracing renderer
+                // thRoughness its 'matrixWorld' matrix. See below:
+                LMesh.rotation.set(0, Math.PI * 0.1, 0);
+                LMesh.position.set(180, 170, -350);
+                LMesh.updateMatrixWorld(true); // 'true' forces immediate matrix update
+                
+                
+                RGeometry = new THREE.BoxGeometry(1,1,1);
+                RMaterial = new THREE.MeshPhysicalMaterial( {
+                        color: new THREE.Color(0.95, 0.95, 0.95), //RGB, ranging from 0.0 - 1.0
+                        roughness: 1.0 // ideal Diffuse material	
+                } );
+                
+                RMesh = new THREE.Mesh(RGeometry, RMaterial);
+                pathTracingScene.add(RMesh);
+                RMesh.visible = false;
+                RMesh.rotation.set(0, -Math.PI * 0.09, 0);
+                RMesh.position.set(370, 85, -170);
+                RMesh.updateMatrixWorld(true); // 'true' forces immediate matrix update
 
-        // set camera's field of view
-        worldCamera.fov = 31;
-        focusDistance = 1180.0;
+                // set camera's field of view
+                worldCamera.fov = 31;
+                focusDistance = 1180.0;
 
-        // position and orient camera
-        cameraControlsObject.position.set(278, 270, 1050);
-        ///cameraControlsYawObject.rotation.y = 0.0;
-        // look slightly upward
-        cameraControlsPitchObject.rotation.x = 0.005;
+                // position and orient camera
+                cameraControlsObject.position.set(278, 270, 1050);
+                ///cameraControlsYawObject.rotation.y = 0.0;
+                // look slightly upward
+                cameraControlsPitchObject.rotation.x = 0.005;
+        }
 
         total_number_of_triangles = modelMesh.geometry.attributes.position.array.length / 9;
         console.log("Triangle count:" + total_number_of_triangles);
@@ -598,6 +636,78 @@ function initSceneData() {
         aabbDataTexture.generateMipmaps = false;
         aabbDataTexture.needsUpdate = true;
 
+        if (!on_initiation){
+                // setup screen-size quad geometry and shaders....
+
+                // this full-screen quad mesh performs the path tracing operations and produces a screen-sized image
+                pathTracingGeometry = new THREE.PlaneBufferGeometry(2, 2);
+                
+                initPathTracingShaders();
+                matType = Math.floor(material_LTypeController.getValue());
+                pathTracingUniforms.uLMaterialType.value = matType;
+                matType = Math.floor(material_RTypeController.getValue());
+                pathTracingUniforms.uRMaterialType.value = matType;
+                pathTracingUniforms.uLColor.value.setRGB( material_LColorController.getValue()[0] / 255, 
+                                                                   material_LColorController.getValue()[1] / 255, 
+                                                                   material_LColorController.getValue()[2] / 255 );
+
+                pathTracingUniforms.uRColor.value.setRGB( material_RColorController.getValue()[0] / 255, 
+                                                                    material_RColorController.getValue()[1] / 255, 
+                                                                    material_RColorController.getValue()[2] / 255 );
+                
+                cameraIsMoving = true;
+                if (cameraIsMoving) {
+                        sampleCounter = 1.0;
+                        frameCounter = 1.0;
+                }
+
+                
+                pathTracingUniforms.uCameraIsMoving.value = cameraIsMoving;
+                pathTracingUniforms.uSampleCounter.value = sampleCounter;
+                pathTracingUniforms.uFrameCounter.value = frameCounter;
+                pathTracingUniforms.uRandomVector.value = randomVector.set( Math.random(), Math.random(), Math.random() );
+
+                // this full-screen quad mesh copies the image output of the pathtracing shader and feeds it back in to that shader as a 'previousTexture'
+                screenTextureGeometry = new THREE.PlaneBufferGeometry(2, 2);
+
+                screenTextureMaterial = new THREE.ShaderMaterial({
+                        uniforms: screenTextureShader.uniforms,
+                        vertexShader: screenTextureShader.vertexShader,
+                        fragmentShader: screenTextureShader.fragmentShader,
+                        depthWrite: false,
+                        depthTest: false
+                });
+
+                screenTextureMaterial.uniforms.tPathTracedImageTexture.value = pathTracingRenderTarget.texture;
+
+                screenTextureMesh = new THREE.Mesh(screenTextureGeometry, screenTextureMaterial);
+                screenTextureScene.add(screenTextureMesh);
+
+
+                // this full-screen quad mesh takes the image output of the path tracing shader (which is a continuous blend of the previous frame and current frame),
+                // and applies gamma correction (which brightens the entire image), and then displays the final accumulated rendering to the screen
+                screenOutputGeometry = new THREE.PlaneBufferGeometry(2, 2);
+
+                screenOutputMaterial = new THREE.ShaderMaterial({
+                        uniforms: screenOutputShader.uniforms,
+                        vertexShader: screenOutputShader.vertexShader,
+                        fragmentShader: screenOutputShader.fragmentShader,
+                        depthWrite: false,
+                        depthTest: false
+                });
+
+                screenOutputMaterial.uniforms.tPathTracedImageTexture.value = pathTracingRenderTarget.texture;
+
+                screenOutputMesh = new THREE.Mesh(screenOutputGeometry, screenOutputMaterial);
+                screenOutputScene.add(screenOutputMesh);
+
+                // this 'jumpstarts' the initial dimensions and parameters for the window and renderer
+                onWindowResize();
+
+                // everything is set up, now we can start animating
+                animate();
+        }
+
         // hdrLoader = new THREE.RGBELoader();
 
 	// hdrPath = 'textures/symmetrical_garden_2k.hdr';
@@ -623,7 +733,6 @@ function initPathTracingShaders() {
  
         // scene/demo-specific uniforms go here
         pathTracingUniforms = {
-
                 tPreviousTexture: { type: "t", value: screenTextureRenderTarget.texture },
                 tTriangleTexture: { type: "t", value: triangleDataTexture },
                 tAABBTexture: { type: "t", value: aabbDataTexture },
@@ -642,6 +751,8 @@ function initPathTracingShaders() {
                 uFocusDistance: { type: "f", value: focusDistance },
                 uLMaterialType: { type: "f", value: 0.0 },
                 uRMaterialType: { type: "f", value: 0.0 },
+
+                uRMesh: { type: "f", value: 0.0 },
 
                 uLColor: { type: "v3", value: new THREE.Color() },
                 uRColor: { type: "v3", value: new THREE.Color() },
@@ -706,8 +817,26 @@ function createPathTracingMaterial() {
 
 // called automatically from within the animate() function
 function updateVariablesAndUniforms() {
-        
+
+        if (changeLMesh) {
+                // console.log('changeLMesh');
+                gltfFilename = LMeshController.getValue().concat('.glb');
+                load_GLTF_Model(gltfFilename);
+                cameraIsMoving = true;
+                changeLMesh = false;
+        }
+        if (changeRMesh) {
+                
+                pathTracingUniforms.uRMesh = (RMeshController.getValue() == 'Sphere')? 0.0 : 1.0;
+                cameraIsMoving = true;
+                changeRMesh = false;
+                // console.log('changeRMesh');
+                // console.log(pathTracingUniforms.uRMesh);
+        }        
+
         if (changeLMaterialType) {
+
+                //console.log('changeLMaterialType');
                                         
                 matType = Math.floor(material_LTypeController.getValue());
                 pathTracingUniforms.uLMaterialType.value = matType;
@@ -723,9 +852,9 @@ function updateVariablesAndUniforms() {
                         pathTracingUniforms.uLColor.value.setRGB(1.0, 1.0, 1.0); 
                 }
                 else if (matType == 3) { // SPEC
-                        pathTracingUniforms.uLColor.value.setRGB (0.971519, 0.959915, 0.915324);
-                        // Au: (1.000000, 0.765557, 0.336057);
-                        // Aluminum: (0.913183, 0.921494, 0.924524) / Copper: (0.955008, 0.637427, 0.538163) / Silver: (0.971519, 0.959915, 0.915324)   
+                        pathTracingUniforms.uLColor.value.setRGB (1.0, 1.0, 1.0);
+                        // Au: (1.000000, 0.765557, 0.336057) / Silver: (0.971519, 0.959915, 0.915324)
+                        // Aluminum: (0.913183, 0.921494, 0.924524) / Copper: (0.955008, 0.637427, 0.538163)   
                 }
                 else if (matType == 4) { // COAT
                         pathTracingUniforms.uLColor.value.setRGB(1.0, 1.0, 1.0);   
@@ -767,8 +896,8 @@ function updateVariablesAndUniforms() {
                 else if (matType == 3) { // SPEC
                         pathTracingUniforms.uRColor.value.setRGB(1.0, 1.0, 1.0); // Aluminum
                         // other metals
-                        // Aluminum: (0.913183, 0.921494, 0.924524)
-                        // Gold: (1.000000, 0.765557, 0.336057) / Copper: (0.955008, 0.637427, 0.538163) / Silver: (0.971519, 0.959915, 0.915324)   
+                        // Aluminum: (0.913183, 0.921494, 0.924524) / Silver: (0.971519, 0.959915, 0.915324)
+                        // Gold: (1.000000, 0.765557, 0.336057) / Copper: (0.955008, 0.637427, 0.538163)    
                 }
                 else if (matType == 4) { // COAT
                         pathTracingUniforms.uRColor.value.setRGB(1.0, 1.0, 1.0);   

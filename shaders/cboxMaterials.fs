@@ -22,6 +22,7 @@ uniform sampler2D tAABBTexture;
 uniform sampler2D tAlbedoTextures[8]; // 8 = max number of diffuse albedo textures per model
 
 uniform float uLMaterialType;
+uniform float uRMesh;
 uniform float uRMaterialType;
 uniform vec3 uLColor;
 uniform vec3 uRColor;
@@ -959,10 +960,14 @@ void SetupScene(void)
 
 	vec3 positionL = vec3(150.0,  91.0, -200.0);
 	vec3 positionR = vec3(400.0,  91.0, -200.0);
-	//spheres[0] = Sphere(  90.0, positionL,  z, uLColor, int(uLMaterialType));// Sphere Left
-	spheres[1] = Sphere(  90.0, positionR,  z, uRColor, int(uRMaterialType));// Sphere Right
-	//boxes[0]  = Box( vec3(-82.0,-170.0, -80.0), vec3(82.0,170.0, 80.0), z, uLColor, int(uLMaterialType));// Left Box
-	//boxes[1]  = Box( vec3(-86.0, -85.0, -80.0), vec3(86.0, 85.0, 80.0), z, uRColor, int(uRMaterialType));// Right Box 
+	if (int(uRMesh) == 0){
+		//spheres[0] = Sphere(  90.0, positionL,  z, uLColor, int(uLMaterialType));// Sphere Left
+		spheres[1] = Sphere(  90.0, positionR,  z, uRColor, int(uRMaterialType));// Sphere Right
+	}
+	else if (int(uRMesh) == 1) {
+		//boxes[0]  = Box( vec3(-82.0,-170.0, -80.0), vec3(82.0,170.0, 80.0), z, uLColor, int(uLMaterialType));// Left Box
+		boxes[1]  = Box( vec3(-86.0, -85.0, -80.0), vec3(86.0, 85.0, 80.0), z, uRColor, int(uRMaterialType));// Right Box 
+	}
 }
 
 
