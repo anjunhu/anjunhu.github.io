@@ -31,4 +31,21 @@
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
   Object.keys(map).forEach(function (id) { io.observe(document.getElementById(id)); });
+
+  // Collapsible sections.
+  document.querySelectorAll('.collapse-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var section = btn.closest('.block');
+      if (!section) return;
+      var collapsed = section.classList.toggle('collapsed');
+      btn.setAttribute('aria-expanded', String(!collapsed));
+    });
+  });
+  document.querySelectorAll('.section-head h2').forEach(function (h2) {
+    h2.addEventListener('click', function (e) {
+      if (e.target.closest('.collapse-toggle')) return;
+      var btn = h2.querySelector('.collapse-toggle');
+      if (btn) btn.click();
+    });
+  });
 })();

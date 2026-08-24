@@ -19,7 +19,6 @@
     <span class="links" style="display:flex; gap:22px; align-items:center;">
       <a class="lk" href="#overview">Overview</a>
       <a class="lk" href="#schedule">Schedule</a>
-      <a class="lk" href="#taxonomy">Taxonomy</a>
       <a class="lk" href="#demo">Demo</a>
       <a class="lk" href="#resources">Resources</a>
       <a class="lk" href="#team">Team</a>
@@ -57,7 +56,7 @@
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Overview</span>
-      <h2>Why this tutorial</h2>
+      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>Why this tutorial</h2>
       <p>
         Multi-agent recommender systems are emerging as a new design paradigm: specialized,
         LLM-powered agents reason over context, invoke tools, exchange intermediate outputs,
@@ -68,6 +67,7 @@
       </p>
     </div>
 
+    <div class="collapsible-body">
     <div class="cards">
       <div class="card">
         <span class="topline" style="background:var(--blue)"></span>
@@ -93,6 +93,7 @@
            benchmarks per cell, plus design-time, runtime, and post-deployment mitigations.</p>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
@@ -101,40 +102,39 @@
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Run of show</span>
-      <h2>Schedule: 3 hours, two main blocks</h2>
-      <p>A morning half-day tutorial. Two ~hour blocks bridged by a short changeover, with a
-         demo placed at the pivot so attendees can red-team it over the break.</p>
+      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>Schedule: 3.5 hours, four speakers</h2>
+      <p>A morning half-day tutorial, 8:30 to 12:00. One 30-minute break sits right after
+         the demo, so attendees can red-team it before Part III picks up.</p>
     </div>
 
+    <div class="collapsible-body">
     <div class="schedule">
       <div class="slot">
-        <span class="time">0:00<br>60 min</span>
+        <span class="time">8:30<br>40 min</span>
         <div class="what">
           <h4>Part I · Foundations: the benign system</h4>
-          <p>From classical → LLM → agentic recommenders. Roles &amp; capabilities, memory,
-             tool use, and levels of autonomy. Everything needed before we touch adversaries.</p>
+          <p>From classical to LLM to agentic recommenders, and the levels of autonomy that
+             separate them. Recurring topologies and a taxonomy of system architectures, plus
+             the attack surfaces and agent roles later parts build on.</p>
         </div>
         <span class="who">Kurt Cutajar</span>
       </div>
 
-      <div class="slot brk">
-        <span class="time">1:00<br>10 min</span>
-        <div class="what"><h4>Changeover break</h4><p>Short reset between speakers.</p></div>
-        <span class="who">·</span>
-      </div>
-
-      <div class="slot mine">
-        <span class="time">1:10<br>50 min</span>
+      <div class="slot">
+        <span class="time">9:10<br>50 min</span>
         <div class="what">
           <h4>Part II · How composition creates risk <span class="tag-chip chip-amp">amplified</span> <span class="tag-chip chip-em">emergent</span></h4>
-          <p>Amplified vs. emergent risks; the drift / misalignment / compromise threat tiers;
-             then a live <strong>ConnaCF</strong> attack/defense demo (hard 10 to 15&nbsp;min).</p>
+          <p>Amplified vs. emergent risks and how to classify a given mechanism; emergent
+             failures such as contagion, false consensus, and collusion; the drift /
+             misalignment / compromise threat tiers. Then a live <strong>ConnaCF</strong> demo:
+             one dissemination attack and one extraction attack across two connectivity knobs
+             (hard 10 to 15&nbsp;min).</p>
         </div>
         <span class="who">Anjun Hu</span>
       </div>
 
       <div class="slot brk">
-        <span class="time">2:00<br>break</span>
+        <span class="time">10:00<br>30 min</span>
         <div class="what">
           <h4>Break: open red-teaming</h4>
           <p>Attendees are invited to play with the demo and submit a “crash” red-teaming prompt.</p>
@@ -143,29 +143,46 @@
       </div>
 
       <div class="slot">
-        <span class="time">2:00<br>50 min</span>
+        <span class="time">10:30<br>40 min</span>
         <div class="what">
-          <h4>Part III · Evaluation &amp; benchmarking</h4>
-          <p>What to measure and when (the scope × setting matrix), plus benchmarking for
-             multi-agent recommenders.</p>
+          <h4>Part III · Evaluation &amp; mitigations</h4>
+          <p>Evaluation at three levels (component, interaction, composition) and the
+             security-utility trade-offs it surfaces. Defences across the lifecycle, from
+             design time to post-incident, and where governance and audit fall short for
+             composed systems.</p>
         </div>
         <span class="who">Yashar Deldjoo</span>
       </div>
 
       <div class="slot">
-        <span class="time">2:50<br>10 min</span>
+        <span class="time">11:10<br>30 min</span>
         <div class="what">
-          <h4>Mitigations, open problems &amp; closing</h4>
-          <p>Design-time / runtime / post-deployment mitigations, open problems, and Q&amp;A.</p>
+          <h4>Bridging general multi-agent safety and RS</h4>
+          <p>Most attack, defence, and evaluation work so far comes from general multi-agent
+             safety, not recommenders specifically. Benchmarks as the concrete next step,
+             whether general agentic-AI governance transfers to RS, and wrap-up.</p>
         </div>
-        <span class="who">Kurt / Jas</span>
+        <span class="who">Jas Kandola</span>
+      </div>
+
+      <div class="slot">
+        <span class="time">11:40<br>15 min</span>
+        <div class="what"><h4>Q&amp;A</h4><p>Open floor for all four speakers.</p></div>
+        <span class="who">All speakers</span>
+      </div>
+
+      <div class="slot brk">
+        <span class="time">11:55<br>5 min</span>
+        <div class="what"><h4>Buffer</h4><p>Room turnover.</p></div>
+        <span class="who">·</span>
       </div>
     </div>
     <p class="note" style="margin-top:14px;">Timings are indicative and will track the final RecSys'26 program.</p>
+    </div>
   </div>
 </section>
 
-<!-- ===================== TAXONOMY ===================== -->
+<!-- ===================== TAXONOMY (removed: "The two lenses" section, not ready to publish) =====================
 <section class="block" id="taxonomy">
   <div class="wrap">
     <div class="section-head">
@@ -247,18 +264,20 @@
     <p class="note" style="margin-top:12px;">Isolated agents can pass their own safety checks while the composed system stays compromised, so evaluation must be scoped to the level at which failures manifest.</p>
   </div>
 </section>
+===================== END TAXONOMY ===================== -->
 
 <!-- ===================== DEMO ===================== -->
 <section class="block alt" id="demo">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Hands-on</span>
-      <h2>The demo: ConnaCF</h2>
+      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>The demo: ConnaCF</h2>
       <p>A live walk-through of <strong>attacking and defending multi-agent collaborative
          filtering through connectivity</strong>, built on AgentCF. We don't ask you to clone
          and run during the talk: we walk it, then you play with the hosted version over the break.</p>
     </div>
 
+    <div class="collapsible-body">
     <div class="demo-card">
       <h3>Connectivity modulates the outcome</h3>
       <p>ConnaCF instantiates a multi-agent recommender as a bipartite user-item agent graph and
@@ -290,6 +309,7 @@
       </div>
       <p style="color:#7E92A6; font-size:.82rem; margin-top:14px;">Runs on a Bedrock-free local path (local Qwen3 + judge), so no AWS account is required to reproduce.</p>
     </div>
+    </div>
   </div>
 </section>
 
@@ -298,9 +318,10 @@
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Materials</span>
-      <h2>Resources</h2>
+      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>Resources</h2>
       <p>Everything in one place: slides, the survey, the living reading list, the demo, and the recording.</p>
     </div>
+    <div class="collapsible-body">
     <div class="resources">
       <a class="res" href="slides/">
         <span class="ic">🖥️</span><span class="status live">Available</span>
@@ -327,6 +348,7 @@
         <h4>Recording</h4><p>Talk recording, posted after RecSys'26.</p>
       </a>
     </div>
+    </div>
   </div>
 </section>
 
@@ -335,10 +357,9 @@
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Presenters</span>
-      <h2>Team</h2>
-      <p>An academic-industry collaboration spanning recommender-system trustworthiness and
-         multi-agent safety, with real-world recommender design and evaluation experience.</p>
+      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>Team</h2>
     </div>
+    <div class="collapsible-body">
     <div class="authors">
       <div class="author">
         <div class="avatar">KC</div>
@@ -369,6 +390,7 @@
            trustworthy &amp; generative recommendation. PhD, Politecnico di Milano.</p>
       </div>
     </div>
+    </div>
   </div>
 </section>
 
@@ -393,7 +415,6 @@
         <ul>
           <li><a href="#overview">Overview</a></li>
           <li><a href="#schedule">Schedule</a></li>
-          <li><a href="#taxonomy">Taxonomy</a></li>
           <li><a href="slides/">Slides</a></li>
         </ul>
       </div>

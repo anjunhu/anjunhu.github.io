@@ -77,6 +77,8 @@ h1{
   gap:18px;
   margin:44px 0 0;
 }
+.cards + .cards{margin-top:18px;}
+.cards-3{grid-template-columns:repeat(3,1fr);}
 .card{
   position:relative;
   display:flex;flex-direction:column;
@@ -154,6 +156,7 @@ footer{
 
 @media (max-width:640px){
   .cards{grid-template-columns:1fr;gap:14px;margin-top:34px;}
+  .cards + .cards{margin-top:14px;}
   header{padding:52px 0 4px;}
   .card{padding:22px 20px 18px;}
   .mark{height:48px;margin-bottom:14px;}
@@ -170,7 +173,8 @@ footer{
     <div class="rule"></div>
   </header>
 
-  <main class="cards">
+  <main>
+  <div class="cards">
 
     <!-- 1. CACR -->
     <div class="card multi" style="--accent:var(--cacr);">
@@ -187,13 +191,13 @@ footer{
           <circle cx="22" cy="44" r="4.5" opacity=".65"/>
         </svg>
       </div>
-      <p class="kicker">RecSys2026 · CIKM2026</p>
+      <p class="kicker">RecSys 2026 · CIKM 2026</p>
       <h2>Trustworthy Multi-Agent Recommender Systems</h2>
-      <p><b>Composing Agents, Compounding Risks</b>: a half-day tutorial on what breaks when recommenders are built by composing LLM agents, with a risk taxonomy, an evaluation framework, and a live attack demo.</p>
+      <p><b>Composing Agents, Compounding Risks</b>: a half-day tutorial on what breaks when recommenders are built by composing LLM agents</p>
       <div class="go">
-        <a href="twmars/">Tutorial site →</a>
-        <a href="https://recsys.acm.org/recsys26/tutorials/" target="_blank" rel="noopener">RecSys2026 ↗</a>
-        <a href="https://cikm2026.diag.uniroma1.it/accepted-tutorials/" target="_blank" rel="noopener">CIKM2026 ↗</a>
+        <a href="twmars/">Tutorial →</a>
+        <a href="https://recsys.acm.org/recsys26/tutorials/" target="_blank" rel="noopener">RecSys 2026 ↗</a>
+        <a href="https://cikm2026.diag.uniroma1.it/accepted-tutorials/" target="_blank" rel="noopener">CIKM 2026 ↗</a>
       </div>
     </div>
 
@@ -211,13 +215,13 @@ footer{
           <rect x="67.5" y="43.5" width="9" height="9" rx="1.5" opacity=".8"/>
         </svg>
       </div>
-      <p class="kicker">RecSys2026</p>
+      <p class="kicker">RecSys 2026</p>
       <h2>Attacking and Defending Collaborative Filtering</h2>
-      <p><b>ConnACF</b>: multi-agent collaborative filtering attacked and defended through connectivity, with dissemination, extraction, and bidirectional attacks.</p>
+      <p><b>ConnACF</b>: multi-agent collaborative filtering attacked and defended through connectivity</p>
       <div class="go">
         <a href="https://www.amazon.science/publications/attacking-and-defending-multi-agent-collaborative-filtering-systems-through-connectivity" target="_blank" rel="noopener">Paper ↗</a>
         <a href="https://github.com/anjunhu/ConnACF" target="_blank" rel="noopener">Code ↗</a>
-        <a href="https://recsys.acm.org/recsys26/contributions/#content-tab-1-3-tab" target="_blank" rel="noopener">RecSys2026 ↗</a>
+        <a href="https://recsys.acm.org/recsys26/contributions/#content-tab-1-3-tab" target="_blank" rel="noopener">RecSys 2026 ↗</a>
       </div>
     </div>
 
@@ -265,45 +269,19 @@ footer{
       <div class="go"><span>Not yet public</span></div>
     </div>
 
-    <!-- 4. MiDSummer -->
-    <a class="card" href="https://iccv.thecvf.com/virtual/2025/poster/1817" target="_blank" rel="noopener" style="--accent:var(--mids);">
+    <!-- 6b. Security-Constrained Diffusion Language Agents (coming soon, title not shown) -->
+    <div class="card locked" style="--accent:var(--rfmd);">
       <div class="mark" aria-hidden="true">
-        <!-- a low midsummer sun over a horizon, scene scattered into splats -->
+        <!-- a shield, dashed: guarded, not yet open -->
         <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <circle cx="48" cy="30" r="11" opacity=".9"/>
-          <path d="M48 13 v-5 M48 52 v5 M31 30 h-6 M65 30 h6 M36 18 l-4-4 M60 42 l4 4 M60 18 l4-4 M36 42 l-4 4" opacity=".38"/>
-          <ellipse cx="26" cy="45" rx="7" ry="4" transform="rotate(-18 26 45)" fill="currentColor" stroke="none" opacity=".5"/>
-          <ellipse cx="70" cy="46" rx="8" ry="4.5" transform="rotate(14 70 46)" fill="currentColor" stroke="none" opacity=".38"/>
-          <ellipse cx="48" cy="50" rx="9" ry="4" fill="currentColor" stroke="none" opacity=".62"/>
+          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".7" stroke-dasharray="4 4"/>
+          <circle cx="48" cy="30" r="3" fill="currentColor" stroke="none" opacity=".85"/>
         </svg>
       </div>
-      <p class="kicker">ICCV2025</p>
-      <h2>MiDSummer</h2>
-      <p>Multi-guidance diffusion for controllable zero-shot immersive Gaussian splatting scene generation.</p>
-      <div class="go"><span>Poster page</span><span class="arrow">↗</span></div>
-    </a>
-
-    <!-- 4b. Articulate3D -->
-    <div class="card multi" style="--accent:var(--mids);">
-      <div class="mark" aria-hidden="true">
-        <!-- two low-poly birds: wide/spread (flying) vs narrow/tucked (resting) -->
-        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round">
-          <path d="M4 36 L22 16 L22 36 Z" fill="currentColor" opacity=".55"/>
-          <path d="M22 16 L22 36 L40 26 Z" fill="currentColor" opacity=".9"/>
-          <path d="M22 16 L26 10" opacity=".9"/>
-          <path d="M58 42 L72 14 L72 42 Z" fill="currentColor" opacity=".55"/>
-          <path d="M72 14 L72 42 L82 38 Z" fill="currentColor" opacity=".9"/>
-          <path d="M72 14 L76 9" opacity=".9"/>
-          <path d="M72 42 V48" opacity=".5"/>
-        </svg>
-      </div>
-      <p class="kicker">BMVC2026</p>
-      <h2>Articulate3D</h2>
-      <p><b>Zero-shot text-driven 3D object posing</b>: repose a mesh through language instructions alone, no per-object training, preferred over 85% of the time in user studies.</p>
-      <div class="go">
-        <a href="https://odeb1.github.io/articulate3d_page_deb/" target="_blank" rel="noopener">Project page ↗</a>
-        <a href="https://arxiv.org/abs/2508.19244" target="_blank" rel="noopener">arXiv ↗</a>
-      </div>
+      <p class="kicker">coming soon</p>
+      <h2>Unannounced</h2>
+      <p>Under Review.</p>
+      <div class="go"><span>Not yet public</span></div>
     </div>
 
     <!-- 5. Adversarial Transferability (two destinations) -->
@@ -319,14 +297,60 @@ footer{
           <path d="M42 30 h12 M50 26 l4 4 -4 4" opacity=".95"/>
         </svg>
       </div>
-      <p class="kicker">BMVC2024 · TMLR</p>
+      <p class="kicker">BMVC 2024 · TMLR 05/2024</p>
       <h2>Adversarial Transferability</h2>
       <p><b>As Firm As Their Foundations</b>: one public CLIP encoder is enough to craft adversarial examples that transfer to 20+ downstream models. Plus a TMLR survey of the transferability landscape.</p>
       <div class="go">
         <a href="https://bmvc2024.org/proceedings/563/" target="_blank" rel="noopener">Paper ↗</a>
         <a href="https://github.com/anjunhu/AFAF" target="_blank" rel="noopener">Code ↗</a>
-        <a href="https://openreview.net/forum?id=AYJ3m7BocI" target="_blank" rel="noopener">TMLR ↗</a>
-        <a href="https://github.com/jindonggu/awesome_adversarial_transferability" target="_blank" rel="noopener">Reading list ↗</a>
+        <a href="https://openreview.net/forum?id=AYJ3m7BocI" target="_blank" rel="noopener">Survey ↗</a>
+        <a href="https://github.com/jindonggu/awesome_adversarial_transferability" target="_blank" rel="noopener">Reading List ↗</a>
+      </div>
+    </div>
+
+
+  </div>
+
+  <div class="cards cards-3">
+
+    <!-- 4b. Articulate3D -->
+    <div class="card multi" style="--accent:var(--mids);">
+      <div class="mark" aria-hidden="true">
+        <!-- two origami birds, folded flat: resting (tall, narrow) and flying (wide, wings spread) -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="none">
+          <path d="M23 8 L13 46 L33 46 Z" fill="currentColor" opacity=".95"/>
+          <path d="M23 8 L23 34 L33 46 Z" fill="currentColor" opacity=".5"/>
+          <path d="M58 44 L75 26 L75 40 Z" fill="currentColor" opacity=".9"/>
+          <path d="M75 26 L92 44 L75 40 Z" fill="currentColor" opacity=".55"/>
+        </svg>
+      </div>
+      <p class="kicker">BMVC 2026</p>
+      <h2>Articulate3D</h2>
+      <p><b>Zero-shot text-driven 3D object posing</b>: repose a mesh through language instructions alone, no per-object training, preferred over 85% of the time in user studies.</p>
+      <div class="go">
+        <a href="https://odeb1.github.io/articulate3d_page_deb/" target="_blank" rel="noopener">Project ↗</a>
+        <a href="https://arxiv.org/abs/2508.19244" target="_blank" rel="noopener">arXiv ↗</a>
+      </div>
+    </div>
+
+    <!-- 4. MiDSummer -->
+    <div class="card multi" style="--accent:var(--mids);">
+      <div class="mark" aria-hidden="true">
+        <!-- a low midsummer sun over a horizon, scene scattered into splats -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="48" cy="30" r="11" opacity=".9"/>
+          <path d="M48 13 v-5 M48 52 v5 M31 30 h-6 M65 30 h6 M36 18 l-4-4 M60 42 l4 4 M60 18 l4-4 M36 42 l-4 4" opacity=".38"/>
+          <ellipse cx="26" cy="45" rx="7" ry="4" transform="rotate(-18 26 45)" fill="currentColor" stroke="none" opacity=".5"/>
+          <ellipse cx="70" cy="46" rx="8" ry="4.5" transform="rotate(14 70 46)" fill="currentColor" stroke="none" opacity=".38"/>
+          <ellipse cx="48" cy="50" rx="9" ry="4" fill="currentColor" stroke="none" opacity=".62"/>
+        </svg>
+      </div>
+      <p class="kicker">ICCV 2025</p>
+      <h2>MiDSummer</h2>
+      <p>Multi-guidance diffusion for controllable zero-shot immersive Gaussian splatting scene generation.</p>
+      <div class="go">
+        <a href="https://iccv.thecvf.com/virtual/2025/poster/1817" target="_blank" rel="noopener">Poster ↗</a>
+        <a href="https://ieeexplore.ieee.org/document/11444900" target="_blank" rel="noopener">Paper ↗</a>
       </div>
     </div>
 
@@ -344,32 +368,37 @@ footer{
           <path d="M18 54 h40" opacity=".28"/>
         </svg>
       </div>
-      <p class="kicker">WebGL · Path tracing</p>
+      <p class="kicker">Demo</p>
       <h2>WebGL Material Sandbox</h2>
-      <p>A real-time path tracer in the browser: seven materials and a handful of meshes in a Cornell box.</p>
-      <div class="go"><span>Open the renderer</span><span class="arrow">→</span></div>
+      <p>A real-time path tracer with seven materials and a handful of meshes in a Cornell box.</p>
+      <div class="go"><span>Renderer</span><span class="arrow">→</span></div>
     </a>
 
-    <!-- 6b. Security-Constrained Diffusion Language Agents (coming soon, title not shown) -->
-    <div class="card locked" style="--accent:var(--rfmd);">
-      <div class="mark" aria-hidden="true">
-        <!-- a shield, dashed: guarded, not yet open -->
-        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".7" stroke-dasharray="4 4"/>
-          <circle cx="48" cy="30" r="3" fill="currentColor" stroke="none" opacity=".85"/>
-        </svg>
-      </div>
-      <p class="kicker">coming soon</p>
-      <h2>Unannounced</h2>
-      <p>Under Review.</p>
-      <div class="go"><span>Not yet public</span></div>
-    </div>
+
+  </div>
 
   </main>
 
 </div>
 
 <footer>anjunhu.github.io</footer>
+
+<script>
+// Multi-destination cards act like the single-link/demo cards: clicking anywhere on
+// the block follows its default url — the first link in the row — while the row's own
+// links stay individually clickable.
+document.querySelectorAll(".card.multi").forEach(function(card){
+  var first = card.querySelector(".go a[href]");
+  if(!first) return;
+  card.style.cursor = "pointer";
+  card.addEventListener("click", function(e){
+    if(e.target.closest("a")) return;                                  // inner link wins
+    if(window.getSelection && String(window.getSelection())) return;   // don't hijack text selection
+    if(first.target === "_blank") window.open(first.href, "_blank", "noopener");
+    else window.location.href = first.href;
+  });
+});
+</script>
 
 </body>
 </html>
