@@ -1,0 +1,4 @@
+# Local-only preview builds. Never commit these: some reveal card content
+# (e.g. unannounced-project titles) that is deliberately withheld from the
+# public site, so they must not exist as tracked file history either.
+*.local-preview.html
