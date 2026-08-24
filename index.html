@@ -1,37 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<title>Materials Demo</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
-		<link href="css/default.css" rel="stylesheet"/>
-		<!-- <base href="https://anjunhu.github.io"/> -->
-	</head>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>a wild anjun appears!</title>
+<meta name="description" content="anjun's chaotic personal website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='11' fill='none' stroke='%23E8A24E' stroke-width='2'/><circle cx='12' cy='12' r='3' fill='%23E8A24E'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0E14;
+  --card:#141A24;
+  --card-hi:#1A212D;
+  --line:#232C3A;
+  --ink:#EEF2F7;
+  --ink-2:#A8B4C4;
+  --ink-3:#6B7889;
 
-	<body>
+  /* one hue per project */
+  --cacr:#5B9BD5;   /* multi-agent recsys risk   */
+  --conn:#4FB3A8;   /* connectivity / mesh       */
+  --rfmd:#7A8798;   /* locked, deliberately mute */
+  --mids:#9B7EDE;   /* generative 3D scenes      */
+  --advt:#D9645B;   /* adversarial               */
+  --brdf:#E8A24E;   /* light / rendering         */
 
-		<div id="container"> </div>
-		<div id="info" style="position:fixed; top:1%; color:rgb(70, 70, 70);">Materials Demo</div>
-		
-		<div id="cameraInfo" style="position:fixed; left:3%; bottom:2%; font-family:arial; color:rgb(255,255,255);"></div>
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:var(--sans);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  display:flex;flex-direction:column;
+  position:relative;
+  overflow-x:hidden;
+}
+body::before,body::after{
+  content:"";position:fixed;
+  width:58vmax;height:58vmax;border-radius:50%;
+  filter:blur(110px);opacity:.15;pointer-events:none;z-index:0;
+}
+body::before{background:var(--brdf);top:-24vmax;left:-18vmax;}
+body::after{background:var(--cacr);bottom:-28vmax;right:-20vmax;}
 
-		<script src="js/three.min.js"> </script>
-		<script src="js/BufferGeometryUtils.js"> </script>
-		<script src="js/GLTFLoader.js"></script>
-		<script src="js/RGBELoader.js"></script>
-		<script src="js/BVH_Acc_Structure_Iterative_Builder.js"> </script>
-		<script src="js/threex.keyboardstate.js"> </script>
-		<script src="js/FirstPersonCameraControls.js"> </script>
-		<script src="js/MobileJoystickControls.js"> </script>
-		<script src="js/stats.min.js"> </script>
-		<script src='js/dat.gui.min.js'></script>
-		<script src="js/pathTracingCommon.js"> </script>
-		<script src="js/commonFunctions.js"> </script>
-		
-		
-		<div id="LGUIcontainer" style="position:fixed; left:3%; bottom:50%;"></div>
-		<div id="RGUIcontainer" style="position:fixed; right:3%; bottom:50%;"></div>
-		<script src="js/cboxMaterials.js"> </script>
+.wrap{
+  position:relative;z-index:1;
+  width:100%;max-width:1140px;
+  margin:0 auto;padding:0 28px;
+  flex:1;
+  display:flex;flex-direction:column;justify-content:center;
+}
+header{padding:64px 0 4px;}
+h1{
+  font-weight:600;
+  font-size:clamp(2.1rem,5.2vw,3.1rem);
+  letter-spacing:-.03em;
+  margin:0;line-height:1.05;
+}
+.rule{
+  width:44px;height:2px;border-radius:2px;
+  background:linear-gradient(90deg,var(--brdf),var(--cacr));
+  margin:20px 0 0;
+}
 
-	</body>
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin:44px 0 0;
+}
+.card{
+  position:relative;
+  display:flex;flex-direction:column;
+  padding:24px 24px 20px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  text-decoration:none;color:inherit;
+  overflow:hidden;
+  transition:transform .22s cubic-bezier(.2,.7,.3,1),
+             border-color .22s ease, background .22s ease;
+}
+.card::after{
+  content:"";position:absolute;inset:0 0 auto;height:2px;
+  background:var(--accent);opacity:.45;transition:opacity .22s ease;
+}
+a.card:hover,a.card:focus-visible,.card.multi:hover{
+  transform:translateY(-4px);
+  background:var(--card-hi);
+  border-color:color-mix(in srgb,var(--accent) 45%,var(--line));
+  outline:none;
+}
+a.card:hover::after,.card.multi:hover::after{opacity:1;}
+a.card:focus-visible{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent);}
+
+/* locked card: no destination yet */
+.card.locked{
+  background:transparent;
+  border-style:dashed;
+  border-color:#202836;
+}
+.card.locked::after{opacity:.2;}
+.card.locked .mark,.card.locked h2{opacity:.62;}
+
+.mark{height:56px;margin:0 0 16px;color:var(--accent);}
+.mark svg{height:100%;width:auto;display:block;overflow:visible;}
+
+.kicker{
+  font-family:var(--mono);
+  font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 7px;
+}
+h2{
+  font-weight:600;font-size:1.14rem;letter-spacing:-.015em;
+  margin:0 0 7px;line-height:1.25;
+}
+.card p{margin:0;color:var(--ink-2);font-size:.855rem;line-height:1.58;}
+
+.go{
+  margin:auto 0 0;padding:18px 0 0;
+  font-family:var(--mono);font-size:.71rem;
+  color:var(--ink-3);
+  display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;
+  transition:color .22s ease;
+}
+a.card:hover .go{color:var(--accent);}
+.go .arrow{transition:transform .22s cubic-bezier(.2,.7,.3,1);display:inline-block;}
+a.card:hover .go .arrow{transform:translateX(4px);}
+/* individually clickable links, for the card with two destinations */
+.go a{
+  color:var(--ink-3);text-decoration:none;
+  border-bottom:1px solid transparent;
+  transition:color .18s ease,border-color .18s ease;
+}
+.go a:hover,.go a:focus-visible{
+  color:var(--accent);border-bottom-color:color-mix(in srgb,var(--accent) 55%,transparent);
+  outline:none;
+}
+
+footer{
+  position:relative;z-index:1;
+  padding:48px 28px 36px;text-align:center;
+  font-family:var(--mono);font-size:.7rem;color:var(--ink-3);
+}
+
+@media (max-width:980px){
+  .cards{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:640px){
+  .cards{grid-template-columns:1fr;gap:14px;margin-top:34px;}
+  header{padding:52px 0 4px;}
+  .card{padding:22px 20px 18px;}
+  .mark{height:48px;margin-bottom:14px;}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header>
+    <h1>Anjun&nbsp;Hu</h1>
+    <div class="rule"></div>
+  </header>
+
+  <main class="cards">
+
+    <!-- 1. CACR -->
+    <div class="card multi" style="--accent:var(--cacr);">
+      <div class="mark" aria-hidden="true">
+        <!-- agents in a mesh; one node's influence propagating outward -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M22 16 L50 30 L22 44 M50 30 L78 16 M50 30 L78 44 M22 16 L22 44" opacity=".4"/>
+          <circle cx="22" cy="16" r="5" fill="currentColor" stroke="none"/>
+          <circle cx="22" cy="16" r="10" opacity=".5"/>
+          <circle cx="22" cy="16" r="15" opacity=".2"/>
+          <circle cx="50" cy="30" r="4.5" opacity=".9"/>
+          <circle cx="78" cy="16" r="4.5" opacity=".65"/>
+          <circle cx="78" cy="44" r="4.5" opacity=".65"/>
+          <circle cx="22" cy="44" r="4.5" opacity=".65"/>
+        </svg>
+      </div>
+      <p class="kicker">RecSys&nbsp;'26 · CIKM&nbsp;'26</p>
+      <h2>Composing Agents, Compounding Risks</h2>
+      <p>A half-day tutorial on what breaks when recommenders are built by composing LLM agents: a risk taxonomy, an evaluation framework, and a live attack demo.</p>
+      <div class="go">
+        <a href="twmars/">Tutorial site →</a>
+        <a href="https://recsys.acm.org/recsys26/tutorials/" target="_blank" rel="noopener">RecSys '26 ↗</a>
+        <a href="https://cikm2026.diag.uniroma1.it/accepted-tutorials/" target="_blank" rel="noopener">CIKM '26 ↗</a>
+      </div>
+    </div>
+
+    <!-- 2. ConnACF -->
+    <div class="card multi" style="--accent:var(--conn);">
+      <div class="mark" aria-hidden="true">
+        <!-- bipartite user/item agent mesh: connectivity is the knob -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M24 12 L72 12 M24 12 L72 30 M24 30 L72 12 M24 30 L72 48 M24 48 L72 30 M24 48 L72 48" opacity=".38"/>
+          <circle cx="24" cy="12" r="4.5" fill="currentColor" stroke="none" opacity=".95"/>
+          <circle cx="24" cy="30" r="4.5" fill="currentColor" stroke="none" opacity=".95"/>
+          <circle cx="24" cy="48" r="4.5" fill="currentColor" stroke="none" opacity=".95"/>
+          <rect x="67.5" y="7.5" width="9" height="9" rx="1.5" opacity=".8"/>
+          <rect x="67.5" y="25.5" width="9" height="9" rx="1.5" opacity=".8"/>
+          <rect x="67.5" y="43.5" width="9" height="9" rx="1.5" opacity=".8"/>
+        </svg>
+      </div>
+      <p class="kicker">Collaborative Filtering · Red Teaming</p>
+      <h2>ConnACF</h2>
+      <p>Attacking and defending multi-agent collaborative filtering through connectivity: dissemination, extraction, and bidirectional attacks.</p>
+      <div class="go">
+        <a href="https://www.amazon.science/publications/attacking-and-defending-multi-agent-collaborative-filtering-systems-through-connectivity" target="_blank" rel="noopener">Paper ↗</a>
+        <a href="https://github.com/anjunhu/ConnACF" target="_blank" rel="noopener">Code ↗</a>
+        <a href="https://recsys.acm.org/recsys26/contributions/#content-tab-1-3-tab" target="_blank" rel="noopener">RecSys '26 ↗</a>
+      </div>
+    </div>
+
+    <!-- 3. RFMD (private) -->
+    <div class="card locked" style="--accent:var(--rfmd);">
+      <div class="mark" aria-hidden="true">
+        <!-- closed padlock, dashed shackle: sealed, not yet open -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M38 26 V20 a10 10 0 0 1 20 0 v6" opacity=".55" stroke-dasharray="3.5 3.5"/>
+          <rect x="32" y="26" width="32" height="24" rx="4.5" opacity=".85"/>
+          <circle cx="48" cy="36" r="3" fill="currentColor" stroke="none" opacity=".9"/>
+          <path d="M48 39 v5" opacity=".9"/>
+        </svg>
+      </div>
+      <p class="kicker">Private</p>
+      <h2>RFMD</h2>
+      <p>Reference Free Memorisation Detection across Diffusion Models. Opens September&nbsp;2026.</p>
+      <div class="go"><span>Not yet public</span></div>
+    </div>
+
+    <!-- 4. MiDSummer -->
+    <a class="card" href="https://iccv.thecvf.com/virtual/2025/poster/1817" target="_blank" rel="noopener" style="--accent:var(--mids);">
+      <div class="mark" aria-hidden="true">
+        <!-- a low midsummer sun over a horizon, scene scattered into splats -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="48" cy="30" r="11" opacity=".9"/>
+          <path d="M48 13 v-5 M48 52 v5 M31 30 h-6 M65 30 h6 M36 18 l-4-4 M60 42 l4 4 M60 18 l4-4 M36 42 l-4 4" opacity=".38"/>
+          <ellipse cx="26" cy="45" rx="7" ry="4" transform="rotate(-18 26 45)" fill="currentColor" stroke="none" opacity=".5"/>
+          <ellipse cx="70" cy="46" rx="8" ry="4.5" transform="rotate(14 70 46)" fill="currentColor" stroke="none" opacity=".38"/>
+          <ellipse cx="48" cy="50" rx="9" ry="4" fill="currentColor" stroke="none" opacity=".62"/>
+        </svg>
+      </div>
+      <p class="kicker">ICCV 2025</p>
+      <h2>MiDSummer</h2>
+      <p>Multi-guidance diffusion for controllable zero-shot immersive Gaussian splatting scene generation.</p>
+      <div class="go"><span>Poster page</span><span class="arrow">↗</span></div>
+    </a>
+
+    <!-- 5. Adversarial Transferability (two destinations) -->
+    <div class="card multi" style="--accent:var(--advt);">
+      <div class="mark" aria-hidden="true">
+        <!-- a perturbation crafted on one model, carrying over to another -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <rect x="10" y="17" width="26" height="26" rx="3" opacity=".9"/>
+          <path d="M10 25.7 h26 M10 34.3 h26 M18.7 17 v26 M27.3 17 v26" opacity=".3"/>
+          <rect x="18.7" y="25.7" width="8.6" height="8.6" fill="currentColor" stroke="none" opacity=".95"/>
+          <rect x="60" y="17" width="26" height="26" rx="3" opacity=".55" stroke-dasharray="4 3.5"/>
+          <rect x="68.7" y="25.7" width="8.6" height="8.6" fill="currentColor" stroke="none" opacity=".62"/>
+          <path d="M42 30 h12 M50 26 l4 4 -4 4" opacity=".95"/>
+        </svg>
+      </div>
+      <p class="kicker">Survey · Code</p>
+      <h2>Adversarial Transferability</h2>
+      <p>Can open-sourced foundation models be used to craft adversarial examples for downstream tasks? Plus the survey's reading list.</p>
+      <div class="go">
+        <a href="https://github.com/anjunhu/AFAF" target="_blank" rel="noopener">AFAF ↗</a>
+        <a href="https://github.com/jindonggu/awesome_adversarial_transferability" target="_blank" rel="noopener">Reading list ↗</a>
+      </div>
+    </div>
+
+    <!-- 6. BRDF Box -->
+    <a class="card" href="brdfbox/" style="--accent:var(--brdf);">
+      <div class="mark" aria-hidden="true">
+        <!-- a light ray striking a sphere, and scattering -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="38" cy="33" r="19" opacity=".85"/>
+          <circle cx="31" cy="26" r="5.2" fill="currentColor" stroke="none" opacity=".9"/>
+          <path d="M2 3 L24 20" opacity=".95"/>
+          <path d="M51 20 L78 5" opacity=".55"/>
+          <path d="M55 30 L86 27" opacity=".38"/>
+          <path d="M53 40 L80 48" opacity=".24"/>
+          <path d="M18 54 h40" opacity=".28"/>
+        </svg>
+      </div>
+      <p class="kicker">WebGL · Path tracing</p>
+      <h2>WebGL Material Sandbox</h2>
+      <p>A real-time path tracer in the browser: seven materials and a handful of meshes in a Cornell box.</p>
+      <div class="go"><span>Open the renderer</span><span class="arrow">→</span></div>
+    </a>
+
+  </main>
+
+</div>
+
+<footer>anjunhu.github.io</footer>
+
+</body>
 </html>

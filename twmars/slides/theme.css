@@ -1,0 +1,136 @@
+/* =====================================================================
+   reveal.js theme: "Compounding Risks"
+   Matches the tutorial website design system. No logos.
+   ===================================================================== */
+:root {
+  --ink:#16202E; --ink-soft:#3A4759; --muted:#6C7A89; --line:#E2E7EC;
+  --paper:#FFFFFF; --paper-2:#F4F6F8; --paper-3:#ECF0F4;
+  --blue:#2D6A9F; --blue-dk:#1F4E78; --orange:#E07B39; --green:#3A9A5B;
+  --red:#C0392B; --gray:#6C7A89;
+  --amp:#5B8DBE; --em:#D4724E;
+  --diss:#6A4C93; --extr:#B5651D; --bidir:#9C7A3C; --def:#3A7D44;
+  --drift:#8AA0B3; --misalign:#C99A4A; --comp:#B0473B;
+  --serif:"Newsreader",Georgia,serif; --sans:"Inter",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,monospace;
+  --r-main-font: var(--sans);
+  --r-heading-font: var(--serif);
+}
+
+.reveal { font-family: var(--sans); font-size: 30px; color: var(--ink); }
+.reveal .slides { text-align: left; }
+.reveal .slides section { top: 0 !important; }
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+  font-family: var(--serif); color: var(--ink); font-weight: 600;
+  text-transform: none; letter-spacing: -.01em; line-height: 1.12; margin: 0 0 .4em;
+}
+.reveal h1 { font-size: 2.0em; }
+.reveal h2 { font-size: 1.5em; }
+.reveal h3 { font-size: 1.12em; }
+.reveal h4 { font-size: .92em; color: var(--ink-soft); }
+.reveal p, .reveal li { color: var(--ink-soft); }
+.reveal strong, .reveal b { color: var(--ink); font-weight: 700; }
+.reveal em { color: var(--blue-dk); font-style: italic; }
+.reveal a { color: var(--blue); }
+.reveal ul, .reveal ol { display: block; margin-left: 1em; }
+.reveal li { margin-bottom: .35em; line-height: 1.4; }
+.reveal code { font-family: var(--mono); font-size: .82em; background: var(--paper-3); padding: 1px 7px; border-radius: 5px; color: var(--blue-dk); }
+.reveal section img { border: 0; box-shadow: none; background: #fff; border-radius: 8px; }
+
+/* background gradient on normal slides */
+.reveal .backgrounds { background: var(--paper); }
+
+/* ---------- eyebrow / kicker ---------- */
+.kicker {
+  font-family: var(--sans); font-size: .5em; font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--blue); margin-bottom: .5em;
+}
+
+/* ---------- speaker color band on top ---------- */
+.speaker-band { position: fixed; top: 0; left: 0; right: 0; height: 6px; z-index: 60; }
+
+/* ---------- title slide ---------- */
+.title-slide { text-align: left; }
+.title-slide .badges { margin-bottom: 28px; }
+.title-slide .badge {
+  display:inline-block; font-family:var(--sans); font-size:.5em; font-weight:600;
+  padding:6px 14px; border-radius:999px; margin-right:8px;
+  background:var(--paper-3); color:var(--ink-soft); border:1px solid var(--line);
+}
+.title-slide .badge.hot { background:var(--blue); color:#fff; border-color:var(--blue); }
+.title-slide h1 .accent { color: var(--blue); }
+.title-slide .sub { font-size:.66em; color:var(--ink-soft); margin-top:.4em; max-width: 26ch; }
+.authorline { font-family:var(--sans); font-size:.52em; color:var(--muted); margin-top: 1.1em; }
+.authorline b { color: var(--ink); font-weight:600; }
+
+/* ---------- section divider ---------- */
+.divider { color:#fff !important; }
+.divider .backgroundfix {}
+.divider h2, .divider h1, .divider p, .divider .kicker { color:#fff !important; }
+.divider .kicker { opacity:.9; }
+.divider .lead { font-size:.7em; max-width: 30ch; opacity:.95; }
+
+/* ---------- two columns ---------- */
+.cols { display:grid; grid-template-columns:1fr 1fr; gap: 30px; align-items:start; }
+.cols.c3 { grid-template-columns: 1fr 1fr 1fr; }
+.cols.wide-left { grid-template-columns: 1.4fr 1fr; }
+
+/* ---------- panel ---------- */
+.panel { background: var(--paper-2); border:1px solid var(--line); border-radius:14px; padding: 22px 24px; }
+.panel.amp { background: linear-gradient(135deg, rgba(91,141,190,.14), rgba(91,141,190,.04)); border-color: rgba(91,141,190,.4); }
+.panel.em  { background: linear-gradient(135deg, rgba(212,114,78,.14), rgba(212,114,78,.04)); border-color: rgba(212,114,78,.4); }
+.panel h3 { margin-top:0; }
+
+/* ---------- chips ---------- */
+.chip { display:inline-block; font-family:var(--sans); font-size:.42em; font-weight:700;
+  padding:3px 11px; border-radius:7px; color:#fff; vertical-align:middle; margin-left:6px; letter-spacing:.02em; }
+.chip-amp{background:var(--amp);} .chip-em{background:var(--em);}
+.chip-drift{background:var(--drift);} .chip-mis{background:var(--misalign);} .chip-comp{background:var(--comp);}
+.chip-diss{background:var(--diss);} .chip-extr{background:var(--extr);} .chip-bidir{background:var(--bidir);} .chip-def{background:var(--def);}
+
+/* ---------- risk gallery grid ---------- */
+.gallery { display:grid; grid-template-columns: 1fr 1fr; gap:14px; font-size:.62em; }
+.gallery .g {
+  background:#fff; border:1px solid var(--line); border-left:4px solid var(--amp);
+  border-radius:10px; padding:12px 14px;
+}
+.gallery.em-g .g { border-left-color: var(--em); }
+.gallery .g b { display:block; color:var(--ink); font-size:1.02em; margin-bottom:2px; }
+.gallery .g span { color:var(--muted); }
+
+/* ---------- matrix table ---------- */
+.reveal table.mx { font-size:.62em; border-collapse:separate; border-spacing:0; width:100%;
+  border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.reveal table.mx th, .reveal table.mx td { border-bottom:1px solid var(--line); border-right:1px solid var(--line);
+  padding:10px 12px; text-align:left; vertical-align:top; }
+.reveal table.mx th { background:var(--paper-3); font-family:var(--sans); font-weight:700; }
+.reveal table.mx td.rh { background:var(--paper-2); font-weight:700; color:var(--ink); }
+.reveal table.mx tr:last-child td { border-bottom:0; }
+.reveal table.mx th:last-child, .reveal table.mx td:last-child { border-right:0; }
+
+/* ---------- TODO / skeleton marker ---------- */
+.todo {
+  display:inline-block; font-family:var(--mono); font-size:.46em; font-weight:600;
+  background: repeating-linear-gradient(45deg, #FFF6E5, #FFF6E5 8px, #FFEFD0 8px, #FFEFD0 16px);
+  border:1px dashed var(--orange); color:#9A5A12; border-radius:6px; padding:3px 9px; letter-spacing:.02em;
+}
+.skeleton p, .skeleton li { color: var(--muted); }
+.owner { font-family:var(--sans); font-size:.46em; font-weight:700; letter-spacing:.08em; text-transform:uppercase; }
+.owner.kurt{color:var(--blue);} .owner.anjun{color:var(--orange);} .owner.yashar{color:var(--green);} .owner.jas{color:var(--diss);}
+
+/* ---------- demo callout ---------- */
+.demo-box { background: linear-gradient(135deg,#1B2A3D,#16202E); color:#E8EEF4; border-radius:14px; padding:24px 28px; }
+.demo-box h3, .demo-box h2 { color:#fff; }
+.demo-box p, .demo-box li { color:#C3CFDC; }
+.demo-box code { background:#0E1620; color:#9FD0EA; }
+
+/* fragments emphasis */
+.reveal .highlight { color: var(--orange); font-weight:700; }
+
+/* footer pager note */
+.pager { position: fixed; bottom: 12px; left: 18px; font-family:var(--sans); font-size:13px; color:var(--muted); z-index:60; }
+
+/* progress + controls color */
+.reveal .progress { color: var(--blue); height: 4px; }
+.reveal .controls { color: var(--blue); }
+.reveal .slide-number { background: transparent; color: var(--muted); font-family: var(--mono); }

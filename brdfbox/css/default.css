@@ -49,3 +49,24 @@ html, body {
 #timePauseButton {
         top: 50px;
 }
+
+#backlink {
+        position: fixed;
+        top: 12px;
+        right: 16px;
+        z-index: 12;
+        font-family: Monospace;
+        font-size: 13px;
+        letter-spacing: 0.02em;
+        color: rgba(255, 255, 255, 0.55);
+        text-decoration: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        background: rgba(0, 0, 0, 0.35);
+        transition: color 0.15s ease, background 0.15s ease;
+}
+
+#backlink:hover {
+        color: #fff;
+        background: rgba(0, 0, 0, 0.6);
+}

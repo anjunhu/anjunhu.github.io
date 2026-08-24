@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>BRDF Box: real-time path tracer</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+		<meta name="description" content="A real-time WebGL path tracer: compare seven BRDF models side by side in a Cornell box, across meshes and HDR environments.">
+		<link href="css/default.css" rel="stylesheet"/>
+	</head>
+
+	<body>
+
+		<div id="container"> </div>
+		<div id="info" style="position:fixed; top:1%; color:rgb(70, 70, 70);">BRDF Box</div>
+
+		<a id="backlink" href="../">← anjunhu.github.io</a>
+
+		<div id="cameraInfo" style="position:fixed; left:3%; bottom:2%; font-family:arial; color:rgb(255,255,255);"></div>
+
+		<script src="js/three.min.js"> </script>
+		<script src="js/BufferGeometryUtils.js"> </script>
+		<script src="js/GLTFLoader.js"></script>
+		<script src="js/RGBELoader.js"></script>
+		<script src="js/BVH_Acc_Structure_Iterative_Builder.js"> </script>
+		<script src="js/threex.keyboardstate.js"> </script>
+		<script src="js/FirstPersonCameraControls.js"> </script>
+		<script src="js/MobileJoystickControls.js"> </script>
+		<script src="js/stats.min.js"> </script>
+		<script src='js/dat.gui.min.js'></script>
+		<script src="js/pathTracingCommon.js"> </script>
+		<script src="js/commonFunctions.js"> </script>
+
+
+		<div id="LGUIcontainer" style="position:fixed; left:3%; bottom:50%;"></div>
+		<div id="RGUIcontainer" style="position:fixed; right:3%; bottom:50%;"></div>
+		<script src="js/cboxMaterials.js"> </script>
+
+		<script>
+		// Two things fight the back link, so it needs both guards:
+		//  1. the scene grabs the pointer on any body click, suppressed on hover,
+		//     the same way the dat.GUI panels do it;
+		//  2. cboxMaterials.js calls preventDefault() on every window click, which
+		//     cancels normal link navigation, so navigate explicitly instead.
+		(function () {
+			var el = document.getElementById('backlink');
+			el.addEventListener('mouseenter', function () { ableToEngagePointerLock = false; }, false);
+			el.addEventListener('mouseleave', function () { ableToEngagePointerLock = true; }, false);
+			el.addEventListener('click', function (event) {
+				event.stopPropagation();
+				window.location.href = el.getAttribute('href');
+			}, false);
+		})();
+		</script>
+
+	</body>
+</html>
