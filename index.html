@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='11' fill='none' stroke='%23E8A24E' stroke-width='2'/><circle cx='12' cy='12' r='3' fill='%23E8A24E'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0A0E14;
@@ -28,7 +28,7 @@
   --brdf:#E8A24E;   /* light / rendering         */
 
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  --mono:"JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
 }
 *{box-sizing:border-box;}
 html,body{height:100%;}
@@ -60,7 +60,7 @@ body::after{background:var(--cacr);bottom:-28vmax;right:-20vmax;}
 }
 header{padding:64px 0 4px;}
 h1{
-  font-weight:600;
+  font-weight:500;
   font-size:clamp(2.1rem,5.2vw,3.1rem);
   letter-spacing:-.03em;
   margin:0;line-height:1.05;
@@ -73,7 +73,7 @@ h1{
 
 .cards{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(2,1fr);
   gap:18px;
   margin:44px 0 0;
 }
@@ -115,8 +115,8 @@ a.card:focus-visible{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent);}
 .mark svg{height:100%;width:auto;display:block;overflow:visible;}
 
 .kicker{
-  font-family:var(--mono);
-  font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;
+  font-family:var(--mono);font-weight:500;
+  font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;
   color:var(--accent);margin:0 0 7px;
 }
 h2{
@@ -152,9 +152,6 @@ footer{
   font-family:var(--mono);font-size:.7rem;color:var(--ink-3);
 }
 
-@media (max-width:980px){
-  .cards{grid-template-columns:repeat(2,1fr);}
-}
 @media (max-width:640px){
   .cards{grid-template-columns:1fr;gap:14px;margin-top:34px;}
   header{padding:52px 0 4px;}
@@ -169,7 +166,7 @@ footer{
 <div class="wrap">
 
   <header>
-    <h1>Anjun&nbsp;Hu</h1>
+    <h1>Welcome! You might be interested in...</h1>
     <div class="rule"></div>
   </header>
 
@@ -190,13 +187,13 @@ footer{
           <circle cx="22" cy="44" r="4.5" opacity=".65"/>
         </svg>
       </div>
-      <p class="kicker">RecSys&nbsp;'26 · CIKM&nbsp;'26</p>
-      <h2>Composing Agents, Compounding Risks</h2>
-      <p>A half-day tutorial on what breaks when recommenders are built by composing LLM agents: a risk taxonomy, an evaluation framework, and a live attack demo.</p>
+      <p class="kicker">RecSys2026 · CIKM2026</p>
+      <h2>Trustworthy Multi-Agent Recommender Systems</h2>
+      <p><b>Composing Agents, Compounding Risks</b>: a half-day tutorial on what breaks when recommenders are built by composing LLM agents, with a risk taxonomy, an evaluation framework, and a live attack demo.</p>
       <div class="go">
         <a href="twmars/">Tutorial site →</a>
-        <a href="https://recsys.acm.org/recsys26/tutorials/" target="_blank" rel="noopener">RecSys '26 ↗</a>
-        <a href="https://cikm2026.diag.uniroma1.it/accepted-tutorials/" target="_blank" rel="noopener">CIKM '26 ↗</a>
+        <a href="https://recsys.acm.org/recsys26/tutorials/" target="_blank" rel="noopener">RecSys2026 ↗</a>
+        <a href="https://cikm2026.diag.uniroma1.it/accepted-tutorials/" target="_blank" rel="noopener">CIKM2026 ↗</a>
       </div>
     </div>
 
@@ -214,13 +211,13 @@ footer{
           <rect x="67.5" y="43.5" width="9" height="9" rx="1.5" opacity=".8"/>
         </svg>
       </div>
-      <p class="kicker">Collaborative Filtering · Red Teaming</p>
-      <h2>ConnACF</h2>
-      <p>Attacking and defending multi-agent collaborative filtering through connectivity: dissemination, extraction, and bidirectional attacks.</p>
+      <p class="kicker">RecSys2026</p>
+      <h2>Attacking and Defending Collaborative Filtering</h2>
+      <p><b>ConnACF</b>: multi-agent collaborative filtering attacked and defended through connectivity, with dissemination, extraction, and bidirectional attacks.</p>
       <div class="go">
         <a href="https://www.amazon.science/publications/attacking-and-defending-multi-agent-collaborative-filtering-systems-through-connectivity" target="_blank" rel="noopener">Paper ↗</a>
         <a href="https://github.com/anjunhu/ConnACF" target="_blank" rel="noopener">Code ↗</a>
-        <a href="https://recsys.acm.org/recsys26/contributions/#content-tab-1-3-tab" target="_blank" rel="noopener">RecSys '26 ↗</a>
+        <a href="https://recsys.acm.org/recsys26/contributions/#content-tab-1-3-tab" target="_blank" rel="noopener">RecSys2026 ↗</a>
       </div>
     </div>
 
@@ -237,7 +234,23 @@ footer{
       </div>
       <p class="kicker">Private</p>
       <h2>RFMD</h2>
-      <p>Reference Free Memorisation Detection across Diffusion Models. Opens September&nbsp;2026.</p>
+      <p>Reference-Free Memorization Detection. Opens September&nbsp;2026.</p>
+      <div class="go"><span>Not yet public</span></div>
+    </div>
+
+    <!-- 3b. Selective Watermark Tampering in Provenance Chains (private, title not shown) -->
+    <div class="card locked" style="--accent:var(--rfmd);">
+      <div class="mark" aria-hidden="true">
+        <!-- a chain of provenance links; the middle one drawn uncertain -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <rect x="14" y="21" width="22" height="18" rx="9" opacity=".85"/>
+          <rect x="37" y="21" width="22" height="18" rx="9" opacity=".55" stroke-dasharray="3.5 3.5"/>
+          <rect x="60" y="21" width="22" height="18" rx="9" opacity=".85"/>
+        </svg>
+      </div>
+      <p class="kicker">Private</p>
+      <h2>Unannounced</h2>
+      <p>A solo project in preparation. Details to follow.</p>
       <div class="go"><span>Not yet public</span></div>
     </div>
 
@@ -253,11 +266,32 @@ footer{
           <ellipse cx="48" cy="50" rx="9" ry="4" fill="currentColor" stroke="none" opacity=".62"/>
         </svg>
       </div>
-      <p class="kicker">ICCV 2025</p>
+      <p class="kicker">ICCV2025</p>
       <h2>MiDSummer</h2>
       <p>Multi-guidance diffusion for controllable zero-shot immersive Gaussian splatting scene generation.</p>
       <div class="go"><span>Poster page</span><span class="arrow">↗</span></div>
     </a>
+
+    <!-- 4b. Articulate3D -->
+    <div class="card multi" style="--accent:var(--mids);">
+      <div class="mark" aria-hidden="true">
+        <!-- a wireframe object reposed by a rotation arrow, driven by text -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M30 20 L52 14 L74 20 L74 40 L52 46 L30 40 Z" opacity=".85"/>
+          <path d="M30 20 L52 26 L74 20 M52 26 L52 46" opacity=".45"/>
+          <path d="M64 8 A16 16 0 0 1 78 24" opacity=".7"/>
+          <path d="M78 24 L74 18 M78 24 L71 26" opacity=".7"/>
+          <path d="M8 12 q3 -5 6 0 q3 5 6 0" opacity=".55"/>
+        </svg>
+      </div>
+      <p class="kicker">Preprint</p>
+      <h2>Articulate3D</h2>
+      <p><b>Zero-shot text-driven 3D object posing</b>: repose a mesh through language instructions alone, no per-object training, preferred over 85% of the time in user studies.</p>
+      <div class="go">
+        <a href="https://odeb1.github.io/articulate3d_page_deb/" target="_blank" rel="noopener">Project page ↗</a>
+        <a href="https://arxiv.org/abs/2508.19244" target="_blank" rel="noopener">arXiv ↗</a>
+      </div>
+    </div>
 
     <!-- 5. Adversarial Transferability (two destinations) -->
     <div class="card multi" style="--accent:var(--advt);">
@@ -272,11 +306,13 @@ footer{
           <path d="M42 30 h12 M50 26 l4 4 -4 4" opacity=".95"/>
         </svg>
       </div>
-      <p class="kicker">Survey · Code</p>
+      <p class="kicker">BMVC2024 · TMLR</p>
       <h2>Adversarial Transferability</h2>
-      <p>Can open-sourced foundation models be used to craft adversarial examples for downstream tasks? Plus the survey's reading list.</p>
+      <p><b>As Firm As Their Foundations</b>: one public CLIP encoder is enough to craft adversarial examples that transfer to 20+ downstream models. Plus a TMLR survey of the transferability landscape.</p>
       <div class="go">
-        <a href="https://github.com/anjunhu/AFAF" target="_blank" rel="noopener">AFAF ↗</a>
+        <a href="https://bmvc2024.org/proceedings/563/" target="_blank" rel="noopener">Paper ↗</a>
+        <a href="https://github.com/anjunhu/AFAF" target="_blank" rel="noopener">Code ↗</a>
+        <a href="https://openreview.net/forum?id=AYJ3m7BocI" target="_blank" rel="noopener">TMLR ↗</a>
         <a href="https://github.com/jindonggu/awesome_adversarial_transferability" target="_blank" rel="noopener">Reading list ↗</a>
       </div>
     </div>
@@ -300,6 +336,21 @@ footer{
       <p>A real-time path tracer in the browser: seven materials and a handful of meshes in a Cornell box.</p>
       <div class="go"><span>Open the renderer</span><span class="arrow">→</span></div>
     </a>
+
+    <!-- 6b. Security-Constrained Diffusion Language Agents (private, title not shown) -->
+    <div class="card locked" style="--accent:var(--rfmd);">
+      <div class="mark" aria-hidden="true">
+        <!-- a shield, dashed: guarded, not yet open -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".7" stroke-dasharray="4 4"/>
+          <circle cx="48" cy="30" r="3" fill="currentColor" stroke="none" opacity=".85"/>
+        </svg>
+      </div>
+      <p class="kicker">Private</p>
+      <h2>Unannounced</h2>
+      <p>A collaborative project in preparation. Details to follow.</p>
+      <div class="go"><span>Not yet public</span></div>
+    </div>
 
   </main>
 
