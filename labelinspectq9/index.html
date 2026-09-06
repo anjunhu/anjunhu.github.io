@@ -266,18 +266,18 @@ function render(){
   // Display sizing, per arm:
   //  - SD 1.4 on LAION IS the validated memorized/unmemorized ground truth, so
   //    it needs no separate reference.
-  //  - single-image LAION pairs (DPO, DanceGRPO) render large; shrink BOTH the
-  //    generation and its reference so the pair fits on one screen without scroll.
+  //  - any single-frame GENERATED image (SD 1.4, DPO, DanceGRPO) is shrunk so it
+  //    sits beside its reference on one screen without scrolling.
+  //  - SD 1.4 on LAION IS the validated ground truth, so it needs no reference.
   //  - every single-frame reference (all LAION arms, SD 1.4 reproduction) is
   //    shrunk so it does not dominate the panel; it is only a comparison aid.
   //  - multi-frame (4-view 3D / video) references are shown as compact thumbnails
   //    at roughly single-frame size, since they are only a comparison aid.
   const isSD14 = /SD ?1\.4/.test(s.model);
-  const shrinkPair = /^(DPO|DanceGRPO)$/.test(s.model);
   const refMulti = s.reference && s.reference.images.length > 1;
 
   const imgs = s.images.length
-    ? grid(s.images, shrinkPair ? 'shrink' : '')
+    ? grid(s.images, s.images.length === 1 ? 'shrink' : '')
     : '<div class="panel"><span class="pill p-warn">render not retained</span></div>';
 
   // The reference is what the judge actually compared the generation against:
