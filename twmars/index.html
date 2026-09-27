@@ -3,437 +3,105 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Composing Agents, Compounding Risks: RecSys'26 Tutorial</title>
-<meta name="description" content="A RecSys'26 tutorial on robustness and alignment in multi-agent recommender systems: a risk taxonomy, an evaluation framework, mitigations, and a live attack/defense demo on multi-agent collaborative filtering.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Composing Agents, Compounding Risks — RecSys 2026 Tutorial</title>
+<meta name="description" content="RecSys 2026 half-day tutorial on robustness and alignment in multi-agent recommender systems. Slides, demo code, reading list, speakers.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23eaeff6'/%3E%3Cpath d='M9 11h14M9 16h14M9 21h14' stroke='%2312507f' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#eaeff6">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Composing Agents, Compounding Risks — RecSys 2026 Tutorial">
+<meta property="og:description" content="Half-day RecSys 2026 tutorial on robustness and alignment in multi-agent recommender systems.">
+<meta name="twitter:card" content="summary">
 <link rel="stylesheet" href="assets/css/site.css">
 </head>
 <body>
+<div class="shell">
 
-<!-- ===================== NAV ===================== -->
-<nav class="nav">
-  <div class="wrap">
-    <span class="brand">Composing&nbsp;Agents, <b>Compounding&nbsp;Risks</b></span>
-    <span class="links" style="display:flex; gap:22px; align-items:center;">
-      <a class="lk" href="#overview">Overview</a>
-      <a class="lk" href="#schedule">Schedule</a>
-      <a class="lk" href="#demo">Demo</a>
-      <a class="lk" href="#resources">Resources</a>
-      <a class="lk" href="#team">Team</a>
-    </span>
-    <a class="cta" href="slides/">Open Slides ↗</a>
-  </div>
-</nav>
+<header class="masthead">
+  <p class="kicker">RecSys 2026 &middot; Minneapolis &middot; 28 September 2026</p>
+  <h1>Composing Agents, Compounding Risks</h1>
+  <p class="subtitle">A Tutorial on Robustness and Alignment in <span class="nb">Multi-Agent</span> Recommender Systems</p>
 
-<!-- ===================== HERO ===================== -->
-<header class="hero">
-  <div class="wrap">
-    <div class="badges">
-      <span class="badge hot">RecSys&nbsp;2026 · Half-Day Tutorial</span>
-      <span class="badge">CIKM&nbsp;2026</span>
-      <span class="badge">Minneapolis, MN · Sep 28 to Oct 2</span>
-    </div>
-    <h1>Composing Agents, <span class="accent">Compounding Risks</span></h1>
-    <p class="lede">
-      Robustness and alignment in <strong>multi-agent recommender systems</strong>.
-      When LLM agents plan, call tools, exchange messages, and carry memory, risk
-      becomes a <em>system-level</em> property. This tutorial gives you a vocabulary
-      for it: a risk taxonomy, an evaluation framework that scales from component to
-      composition, mitigations across the lifecycle, and a live attack/defense demo.
-    </p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="slides/">▶ View the slides</a>
-      <a class="btn btn-ghost" href="#demo">Explore the demo</a>
-      <a class="btn btn-ghost" href="#schedule">See the schedule</a>
-    </div>
+  <div class="byline">
+    <div class="person"><span class="name">Kurt Cutajar</span><span class="org">Amazon Prime Video, UK</span></div>
+    <div class="person"><span class="name">Jas Kandola</span><span class="org">Amazon Prime Video, UK</span></div>
+    <div class="person"><span class="name">Anjun Hu</span><span class="org">University of Oxford, UK</span></div>
+    <div class="person"><span class="name">Yashar Deldjoo</span><span class="org">Politecnico di Bari, Italy</span></div>
   </div>
+
 </header>
 
-<!-- ===================== OVERVIEW ===================== -->
-<section class="block" id="overview">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Overview</span>
-      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>Why this tutorial</h2>
-      <p>
-        Multi-agent recommender systems are emerging as a new design paradigm: specialized,
-        LLM-powered agents reason over context, invoke tools, exchange intermediate outputs,
-        and maintain memory across sessions. Composition buys modularity and transparency,
-        but wiring together agents' roles, authority, and communication channels also
-        <em>compounds</em> risk. Failures that are invisible when agents are tested in
-        isolation surface only once the agents interact.
-      </p>
-    </div>
+<p class="lead">
+  Multi-agent recommender systems are emerging as a new design paradigm in which LLM-powered agents
+  plan over context, invoke tools, exchange intermediate outputs, and maintain memory across
+  interactions. While these compositions create new opportunities for interactive and modular
+  recommendation, they also introduce system-level risks that are easy to miss when agents are
+  evaluated in isolation. As recommendation increasingly arises from composed multi-agent systems
+  rather than single models, a shared vocabulary is still lacking for how risks propagate through
+  agent interaction and how they should be evaluated. In line with RecSys 2026’s emphasis on
+  recommender systems as systems, this tutorial addresses that gap through a risk taxonomy for
+  multi-agent recommenders, an evaluation framework that scales from component to composition
+  across offline and online tests, and mitigations across the system lifecycle.
+</p>
 
-    <div class="collapsible-body">
-    <div class="cards">
-      <div class="card">
-        <span class="topline" style="background:var(--blue)"></span>
-        <div class="num">01</div>
-        <h3>Topology &amp; workflow framing</h3>
-        <p>What is being composed, what authority each agent holds, and where risk enters:
-           separating <em>connectivity</em> (who can talk to whom) from <em>workflow</em>
-           (who does what, in what order).</p>
-      </div>
-      <div class="card">
-        <span class="topline" style="background:var(--orange)"></span>
-        <div class="num">02</div>
-        <h3>A risk taxonomy</h3>
-        <p>Two lenses applied throughout: <b>amplified vs. emergent</b> risk, and the
-           <b>drift → misalignment → compromise</b> threat tiers, each tied to the
-           composition patterns that produce it.</p>
-      </div>
-      <div class="card">
-        <span class="topline" style="background:var(--green)"></span>
-        <div class="num">03</div>
-        <h3>Evaluation &amp; mitigation</h3>
-        <p>An evaluation framework organized by <b>scope × setting</b>, with concrete
-           benchmarks per cell, plus design-time, runtime, and post-deployment mitigations.</p>
-      </div>
-    </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== SCHEDULE ===================== -->
-<section class="block alt" id="schedule">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Run of show</span>
-      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>Schedule: 3.5 hours, four speakers</h2>
-      <p>A morning half-day tutorial, 8:30 to 12:00. One 30-minute break sits right after
-         the demo, so attendees can red-team it before Part III picks up.</p>
-    </div>
-
-    <div class="collapsible-body">
-    <div class="schedule">
-      <div class="slot">
-        <span class="time">8:30<br>40 min</span>
-        <div class="what">
-          <h4>Part I · Foundations: the benign system</h4>
-          <p>From classical to LLM to agentic recommenders, and the levels of autonomy that
-             separate them. Recurring topologies and a taxonomy of system architectures, plus
-             the attack surfaces and agent roles later parts build on.</p>
-        </div>
-        <span class="who">Kurt Cutajar</span>
-      </div>
-
-      <div class="slot">
-        <span class="time">9:10<br>50 min</span>
-        <div class="what">
-          <h4>Part II · How composition creates risk <span class="tag-chip chip-amp">amplified</span> <span class="tag-chip chip-em">emergent</span></h4>
-          <p>Amplified vs. emergent risks and how to classify a given mechanism; emergent
-             failures such as contagion, false consensus, and collusion; the drift /
-             misalignment / compromise threat tiers. Then a live <strong>ConnaCF</strong> demo:
-             one dissemination attack and one extraction attack across two connectivity knobs
-             (hard 10 to 15&nbsp;min).</p>
-        </div>
-        <span class="who">Anjun Hu</span>
-      </div>
-
-      <div class="slot brk">
-        <span class="time">10:00<br>30 min</span>
-        <div class="what">
-          <h4>Break: open red-teaming</h4>
-          <p>Attendees are invited to play with the demo and submit a “crash” red-teaming prompt.</p>
-        </div>
-        <span class="who">audience</span>
-      </div>
-
-      <div class="slot">
-        <span class="time">10:30<br>40 min</span>
-        <div class="what">
-          <h4>Part III · Evaluation &amp; mitigations</h4>
-          <p>Evaluation at three levels (component, interaction, composition) and the
-             security-utility trade-offs it surfaces. Defences across the lifecycle, from
-             design time to post-incident, and where governance and audit fall short for
-             composed systems.</p>
-        </div>
-        <span class="who">Yashar Deldjoo</span>
-      </div>
-
-      <div class="slot">
-        <span class="time">11:10<br>30 min</span>
-        <div class="what">
-          <h4>Bridging general multi-agent safety and RS</h4>
-          <p>Most attack, defence, and evaluation work so far comes from general multi-agent
-             safety, not recommenders specifically. Benchmarks as the concrete next step,
-             whether general agentic-AI governance transfers to RS, and wrap-up.</p>
-        </div>
-        <span class="who">Jas Kandola</span>
-      </div>
-
-      <div class="slot">
-        <span class="time">11:40<br>15 min</span>
-        <div class="what"><h4>Q&amp;A</h4><p>Open floor for all four speakers.</p></div>
-        <span class="who">All speakers</span>
-      </div>
-
-      <div class="slot brk">
-        <span class="time">11:55<br>5 min</span>
-        <div class="what"><h4>Buffer</h4><p>Room turnover.</p></div>
-        <span class="who">·</span>
-      </div>
-    </div>
-    <p class="note" style="margin-top:14px;">Timings are indicative and will track the final RecSys'26 program.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== TAXONOMY (removed: "The two lenses" section, not ready to publish) =====================
-<section class="block" id="taxonomy">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">The two lenses</span>
-      <h2>How we reason about risk</h2>
-      <p>Every risk in the tutorial is read through two lenses: an <em>isolation test</em>
-         that separates amplified from emergent risk, and an <em>intent axis</em> that sorts
-         failures into three threat tiers.</p>
-    </div>
-
-    <div class="lens-grid">
-      <div class="lens amp">
-        <span class="tag">Lens 1a</span>
-        <h3>Amplified risk</h3>
-        <p>Already present in a single agent, and <strong>worse</strong> once agents exchange
-           messages. The harm is definable for one agent; composition lets it spread or compound.</p>
-        <ul>
-          <li>Injection &amp; hallucination propagation</li>
-          <li>Pipeline &amp; memory poisoning</li>
-          <li>Bias hardening under correlated agents</li>
-          <li>Feedback loops that close between agents</li>
-        </ul>
-      </div>
-      <div class="lens em">
-        <span class="tag">Lens 1b</span>
-        <h3>Emergent risk</h3>
-        <p>No single-agent analogue: the harm <strong>cannot be stated</strong> for a system
-           of one. It is a property of the interaction itself.</p>
-        <ul>
-          <li>Collusion &amp; false consensus / contagion</li>
-          <li>Inter-agent communication attacks</li>
-          <li>Monitor gaming &amp; coordination pathologies</li>
-          <li>Compositional privacy leakage</li>
-        </ul>
-      </div>
-    </div>
-
-    <h3 style="margin:44px 0 14px; font-size:1.3rem;">Lens 2: Threat tiers by intent</h3>
-    <table class="matrix">
-      <tr>
-        <th style="width:160px">Tier</th><th>What drives it</th><th>Evaluation scope</th>
-      </tr>
-      <tr>
-        <td class="rowhead"><span class="tag-chip chip-drift">Drift</span></td>
-        <td class="cell-method">System dynamics degrade quality/fairness/safety over time, with <b>no adversary</b>. Feedback loops, distribution shift, cross-agent accumulation.</td>
-        <td>Component</td>
-      </tr>
-      <tr>
-        <td class="rowhead"><span class="tag-chip chip-mis">Misalignment</span></td>
-        <td class="cell-method">An internal agent pursues an objective that <b>diverges</b> from the system goal: multi-stakeholder conflict, reward hacking, auditor sycophancy.</td>
-        <td>Interaction</td>
-      </tr>
-      <tr>
-        <td class="rowhead"><span class="tag-chip chip-comp">Compromise</span></td>
-        <td class="cell-method">An <b>external attacker</b> corrupts one or more agents: poisoning, prompt injection, prompt infection, peer contagion.</td>
-        <td>Composition</td>
-      </tr>
-    </table>
-
-    <h3 style="margin:44px 0 14px; font-size:1.3rem;">Evaluation framework: scope × setting</h3>
-    <table class="matrix">
-      <tr><th style="width:150px">Scope</th><th>Offline</th><th>Online</th></tr>
-      <tr>
-        <td class="rowhead">Component</td>
-        <td class="cell-method"><b>Per-agent checks</b> · constraint tests, recommender metrics, adversarial prompting</td>
-        <td class="cell-method"><b>Behavioural drift detection</b></td>
-      </tr>
-      <tr>
-        <td class="rowhead">Interaction</td>
-        <td class="cell-method"><b>Agent-pair red-teaming</b> · protocol checks, counterfactual analysis</td>
-        <td class="cell-method"><b>Inter-agent message-trace monitoring</b></td>
-      </tr>
-      <tr>
-        <td class="rowhead">Composition</td>
-        <td class="cell-method"><b>End-to-end stress tests</b> · fairness &amp; collusion audits</td>
-        <td class="cell-method"><b>System-level KPIs</b> · incident reconstruction</td>
-      </tr>
-    </table>
-    <p class="note" style="margin-top:12px;">Isolated agents can pass their own safety checks while the composed system stays compromised, so evaluation must be scoped to the level at which failures manifest.</p>
-  </div>
-</section>
-===================== END TAXONOMY ===================== -->
-
-<!-- ===================== DEMO ===================== -->
-<section class="block alt" id="demo">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Hands-on</span>
-      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>The demo: ConnaCF</h2>
-      <p>A live walk-through of <strong>attacking and defending multi-agent collaborative
-         filtering through connectivity</strong>, built on AgentCF. We don't ask you to clone
-         and run during the talk: we walk it, then you play with the hosted version over the break.</p>
-    </div>
-
-    <div class="collapsible-body">
-    <div class="demo-card">
-      <h3>Connectivity modulates the outcome</h3>
-      <p>ConnaCF instantiates a multi-agent recommender as a bipartite user-item agent graph and
-         sweeps two connectivity axes: <b>candidate count</b> <code>k</code> (k=0 MACF → k=2 AgentCF → k=3)
-         and <b>catalog concentration</b> ρ (sparse → dense). The same attack that fizzles in a sparse
-         graph can become an epidemic in a dense one: that gap <em>is</em> the amplified-vs-emergent story.</p>
-
-      <div class="fam-pills">
-        <span class="pill diss">Dissemination &middot; NetSafe · CORBA · DrunkAgent · Prompt-Infection</span>
-        <span class="pill extr">Extraction &middot; MAMA · MASLeak · InjecAgent</span>
-        <span class="pill bidir">Bidirectional &middot; TOMA · MASTER</span>
-        <span class="pill def">Defense &middot; G-Safeguard · BlindGuard · T/M-Guard</span>
-      </div>
-
-      <div class="figrow">
-        <figure>
-          <img src="assets/img/connacf_attacks.png" alt="ConnaCF attack and defense families on multi-agent collaborative filtering">
-          <figcaption>Attack/defense families reproduced on multi-agent CF (red = attackers).</figcaption>
-        </figure>
-        <figure>
-          <img src="assets/img/connacf_connectivity.png" alt="Connectivity axes: candidate count and catalog concentration">
-          <figcaption>Connectivity axes: candidate count <code>k</code> and catalog concentration ρ.</figcaption>
-        </figure>
-      </div>
-
-      <div class="hero-cta" style="margin-top:20px;">
-        <a class="btn btn-primary" href="https://github.com/anjunhu/connacf" target="_blank" rel="noopener">▶ Open the ConnaCF repo</a>
-        <a class="btn btn-ghost" style="background:transparent;color:#cfe;border-color:#33485e;" href="slides/#/demo">Demo slides</a>
-      </div>
-      <p style="color:#7E92A6; font-size:.82rem; margin-top:14px;">Runs on a Bedrock-free local path (local Qwen3 + judge), so no AWS account is required to reproduce.</p>
-    </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== RESOURCES ===================== -->
-<section class="block" id="resources">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Materials</span>
-      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>Resources</h2>
-      <p>Everything in one place: slides, the survey, the living reading list, the demo, and the recording.</p>
-    </div>
-    <div class="collapsible-body">
-    <div class="resources">
-      <a class="res" href="slides/">
-        <span class="ic">🖥️</span><span class="status live">Available</span>
-        <h4>Slides</h4><p>The full reveal.js deck. Press <kbd>S</kbd> for speaker notes, <kbd>Esc</kbd> for overview.</p>
-      </a>
-      <a class="res" href="#" data-todo="survey-arxiv">
-        <span class="ic">📄</span><span class="status soon">In prep</span>
-        <h4>Survey paper</h4><p>The companion TMLR survey on robustness &amp; alignment in MARS.</p>
-      </a>
-      <a class="res" href="#" data-todo="fntrends-chapter">
-        <span class="ic">📚</span><span class="status soon">In prep</span>
-        <h4>FnTrends book chapter</h4><p>Trustworthy RecSys monograph chapter (Foundations &amp; Trends in IR).</p>
-      </a>
-      <a class="res" href="https://github.com/anjunhu/Awesome-Trustworthy-MARS" target="_blank" rel="noopener">
-        <span class="ic">🗂️</span><span class="status live">Live · weekly</span>
-        <h4>Living reading list</h4><p>Auto-crawled Awesome list of MARS risk &amp; trustworthiness papers.</p>
-      </a>
-      <a class="res" href="https://github.com/anjunhu/connacf" target="_blank" rel="noopener">
-        <span class="ic">⚔️</span><span class="status live">Available</span>
-        <h4>ConnaCF demo</h4><p>Attack/defense code on multi-agent collaborative filtering.</p>
-      </a>
-      <a class="res" href="#" data-todo="recording">
-        <span class="ic">🎥</span><span class="status soon">After event</span>
-        <h4>Recording</h4><p>Talk recording, posted after RecSys'26.</p>
-      </a>
-    </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== TEAM ===================== -->
-<section class="block alt" id="team">
-  <div class="wrap">
-    <div class="section-head">
-      <span class="eyebrow">Presenters</span>
-      <h2><button class="collapse-toggle" type="button" aria-expanded="true" aria-label="Collapse section">▾</button>Team</h2>
-    </div>
-    <div class="collapsible-body">
-    <div class="authors">
-      <div class="author">
-        <div class="avatar">KC</div>
-        <h4>Kurt Cutajar</h4>
-        <div class="affil">Amazon · London</div>
-        <p>Senior Applied Scientist working on recommendation, time-series, and generative AI
-           across Amazon MGM Studios and Prime Video. PhD, Sorbonne / EURECOM.</p>
-      </div>
-      <div class="author">
-        <div class="avatar">JK</div>
-        <h4>Jas Kandola</h4>
-        <div class="affil">Amazon · London</div>
-        <p>Senior Applied Science Manager leading the personalization intelligence layer for
-           Prime Video's commerce ecosystem. PhD in ML; ex-Gatsby Unit.</p>
-      </div>
-      <div class="author">
-        <div class="avatar">AH</div>
-        <h4>Anjun Hu</h4>
-        <div class="affil">University of Oxford</div>
-        <p>PhD candidate in responsible ML: adversarial robustness, memorization detection,
-           guided diffusion sampling, and generative watermarking.</p>
-      </div>
-      <div class="author">
-        <div class="avatar">YD</div>
-        <h4>Yashar Deldjoo</h4>
-        <div class="affil">Politecnico di Bari</div>
-        <p>Associate Professor; associate editor for IEEE TKDE and ACM CSUR; guest editor on
-           trustworthy &amp; generative recommendation. PhD, Politecnico di Milano.</p>
-      </div>
-    </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===================== FOOTER ===================== -->
-<footer>
-  <div class="wrap">
-    <div class="grid">
-      <div>
-        <h5>Cite this tutorial</h5>
-        <div class="bibtex">@inproceedings{cutajar2026composing,
-  title     = {Composing Agents, Compounding Risks: A Tutorial on
-               Robustness and Alignment in Multi-Agent Recommender Systems},
-  author    = {Cutajar, Kurt and Kandola, Jas and
-               Hu, Anjun and Deldjoo, Yashar},
-  booktitle = {Proceedings of the 20th ACM Conference on
-               Recommender Systems (RecSys '26)},
+<details class="cite">
+    <summary>Cite this tutorial</summary>
+<pre>@inproceedings{cutajar2026composing,
+  title     = {Composing Agents, Compounding Risks: A Tutorial on Robustness
+               and Alignment in Multi-Agent Recommender Systems},
+  author    = {Cutajar, Kurt and Hu, Anjun and Deldjoo, Yashar and Kandola, Jas},
+  booktitle = {Proceedings of the 20th ACM Conference on Recommender Systems (RecSys '26)},
   year      = {2026}
-}</div>
-      </div>
-      <div>
-        <h5>Tutorial</h5>
-        <ul>
-          <li><a href="#overview">Overview</a></li>
-          <li><a href="#schedule">Schedule</a></li>
-          <li><a href="slides/">Slides</a></li>
-        </ul>
-      </div>
-      <div>
-        <h5>Materials</h5>
-        <ul>
-          <li><a href="#demo">ConnaCF demo</a></li>
-          <li><a href="#resources">Survey &amp; reading list</a></li>
-          <li><a href="#team">Presenters</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="copyline">
-      RecSys'26 &amp; CIKM'26 half-day tutorial · Composing Agents, Compounding Risks.
-      Page content is provisional and will be updated ahead of the event.
-    </div>
-  </div>
-</footer>
+}</pre>
+  </details>
 
-<script src="assets/js/site.js"></script>
+<section class="materials">
+  <h2>Materials</h2>
+  <p class="slides-notice">⚠️ Placeholder — the finished slides will be posted here after the tutorial. The preview below is not the final deck.</p>
+  <a class="slides-feature" href="assets/recsys2026.pdf" download="Composing-Agents-Compounding-Risks-RecSys-2026.pdf" aria-label="Download the tutorial slides as a PDF, 0.8 megabytes. Note: placeholder, final slides posted after the tutorial.">
+    <span class="placeholder-ribbon" aria-hidden="true">Placeholder</span>
+    <img class="slide-preview" src="assets/img/slides-title.png" alt="First page of the Composing Agents, Compounding Risks slide deck">
+    <span class="slides-download">
+      <span>
+        <strong>Download the slides</strong>
+        <small>PDF &middot; 0.8 MB</small>
+      </span>
+      <span class="download-icon" aria-hidden="true">&darr;</span>
+    </span>
+  </a>
+  <ul class="resource-links">
+    <li>
+      <a href="https://github.com/anjunhu/ConnACF" target="_blank" rel="noopener">
+        <span>
+          <strong>ConnACF demo</strong>
+          <small>Code and setup &middot; GitHub</small>
+        </span>
+        <span class="resource-arrow" aria-hidden="true">&nearr;</span>
+      </a>
+    </li>
+    <li>
+      <a href="https://github.com/anjunhu/Awesome-Trustworthy-MARS" target="_blank" rel="noopener">
+        <span>
+          <strong>Reading list on trustworthy multi-agent recommenders</strong>
+          <small>Curated papers &middot; GitHub</small>
+        </span>
+        <span class="resource-arrow" aria-hidden="true">&nearr;</span>
+      </a>
+    </li>
+  </ul>
+</section>
+
+<section class="refs">
+  <h2>Related papers by the speakers</h2>
+  <ul class="papers">
+    <li><a href="https://arxiv.org/abs/2608.03272" target="_blank" rel="noopener">Attacking and Defending Multi-Agent Collaborative Filtering Systems Through Connectivity</a>
+      <span class="who">Anjun Hu, Hanting Xie, Saranya Govindan, Jas Kandola, Kurt Cutajar &middot; RecSys 2026</span></li>
+    <li><a href="https://arxiv.org/abs/2507.02097" target="_blank" rel="noopener">The Future is Agentic: Definitions, Perspectives, and Open Challenges of Multi-Agent Recommender Systems</a>
+      <span class="who">Reza Yousefi Maragheh, Yashar Deldjoo &middot; arXiv 2507.02097, 2025</span></li>
+    <li><a href="https://arxiv.org/abs/2607.04433" target="_blank" rel="noopener">Autonomous Information Seeking: A Roadmap for Agentic Recommender Systems</a>
+      <span class="who">Xinyu Lin, Yashar Deldjoo, Sunhao Dai, Honghui Bao, Xiaopeng Ye, Fatemeh Nazary, Wenjie Wang, Tommaso Di Noia, Jun Xu, Tat-Seng Chua &middot; arXiv 2607.04433, 2026</span></li>
+  </ul>
+</section>
+
+</div>
 </body>
 </html>
