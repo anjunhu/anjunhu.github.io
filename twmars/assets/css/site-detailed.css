@@ -297,3 +297,7 @@ footer li { margin-bottom: 8px; font-size: .9rem; }
 .chip-amp { background: var(--amp); } .chip-em { background: var(--em); }
 .chip-drift { background: var(--drift); } .chip-mis { background: var(--misalign); } .chip-comp { background: var(--comp); }
 .note { font-size: .82rem; color: var(--muted); font-style: italic; }
+
+.paper-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.paper-badges a { border: 0; line-height: 0; }
+.paper-badges img { height: 20px; display: block; }

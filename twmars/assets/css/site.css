@@ -106,11 +106,17 @@ section { padding-top: 28px; margin-top: 34px; border-top: 1px solid var(--line)
   font-size: .9rem;
 }
 
+.materials-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+  max-width: 900px;
+}
+
 .slides-feature {
   position: relative;
   display: block;
-  max-width: 900px;
-  margin: 0 0 26px;
+  margin: 0;
   border: 1px solid var(--line);
   background: #fff;
   overflow: hidden;
@@ -184,16 +190,13 @@ section { padding-top: 28px; margin-top: 34px; border-top: 1px solid var(--line)
 }
 
 .resource-links {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  max-width: 900px;
+  display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.resource-links li { display: flex; }
+.resource-links li { display: flex; flex: 1; }
 
 .resource-links a {
   flex: 1;
@@ -296,7 +299,6 @@ ul.papers .who { display: block; color: var(--muted); font-size: .85rem; line-he
   .byline { gap: 14px 26px; }
   .subtitle { margin-bottom: 30px; }
   .lead, ul.papers li { overflow-wrap: anywhere; }
-  .resource-links { grid-template-columns: 1fr; }
 }
 
 
@@ -308,3 +310,7 @@ ul.papers .who { display: block; color: var(--muted); font-size: .85rem; line-he
   .cite { display: none; }
   section { break-inside: avoid; }
 }
+
+.paper-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.paper-badges a, ul.papers .paper-badges a { border: 0; padding: 0; line-height: 0; }
+.paper-badges img { height: 20px; display: block; }

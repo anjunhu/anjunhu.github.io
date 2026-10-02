@@ -22,6 +22,7 @@
   /* one hue per project */
   --cacr:#5B9BD5;   /* multi-agent recsys risk   */
   --conn:#4FB3A8;   /* connectivity / mesh       */
+  --memo:#D46FA8;   /* diffusion memorization    */
   --rfmd:#7A8798;   /* locked, deliberately mute */
   --mids:#9B7EDE;   /* generative 3D scenes      */
   --advt:#D9645B;   /* adversarial               */
@@ -195,7 +196,8 @@ footer{
       <h2>Trustworthy Multi-Agent Recommender Systems</h2>
       <p><b>Composing Agents, Compounding Risks</b>: a half-day tutorial on what breaks when recommenders are built by composing LLM agents</p>
       <div class="go">
-        <a href="twmars/">Tutorial →</a>
+        <a href="twmars/">Tutorial ↗</a>
+        <a href="https://dl.acm.org/doi/10.1145/3773078.3831750" target="_blank" rel="noopener">Proceedings ↗</a>
         <a href="https://recsys.acm.org/recsys26/tutorials/" target="_blank" rel="noopener">RecSys 2026 ↗</a>
         <a href="https://cikm2026.diag.uniroma1.it/accepted-tutorials/" target="_blank" rel="noopener">CIKM 2026 ↗</a>
       </div>
@@ -220,13 +222,16 @@ footer{
       <p><b>ConnACF</b>: multi-agent collaborative filtering attacked and defended through connectivity</p>
       <div class="go">
         <a href="https://www.amazon.science/publications/attacking-and-defending-multi-agent-collaborative-filtering-systems-through-connectivity" target="_blank" rel="noopener">Paper ↗</a>
+        <a href="https://dl.acm.org/doi/10.1145/3773078.3831748" target="_blank" rel="noopener">Proceedings ↗</a>
+        <a href="https://arxiv.org/abs/2608.03272" target="_blank" rel="noopener">arXiv ↗</a>
         <a href="https://github.com/anjunhu/ConnACF" target="_blank" rel="noopener">Code ↗</a>
+        <a href="https://huggingface.co/spaces/anjunhu/agentcf-mesh-trace-demo" target="_blank" rel="noopener">Demo ↗</a>
         <a href="https://recsys.acm.org/recsys26/contributions/#content-tab-1-3-tab" target="_blank" rel="noopener">RecSys 2026 ↗</a>
       </div>
     </div>
 
-    <!-- 3. RFMD (coming soon) -->
-    <div class="card locked" style="--accent:var(--rfmd);">
+    <!-- 3. RFMD (coming soon, demo live) -->
+    <div class="card multi" style="--accent:var(--memo);">
       <div class="mark" aria-hidden="true">
         <!-- several diffusion models converging into two overlapping
              memorized / unmemorized density curves, the detection problem -->
@@ -250,6 +255,23 @@ footer{
       <p class="kicker">coming soon</p>
       <h2>Reference-Free Memorization Detection</h2>
       <p>Under Review.</p>
+      <div class="go">
+        <a href="https://huggingface.co/spaces/anjunhu/rfmd-metric-inspector" target="_blank" rel="noopener">Demo ↗</a>
+      </div>
+    </div>
+
+    <!-- 6b. Security-Constrained Diffusion Language Agents (coming soon, title not shown) -->
+    <div class="card locked" style="--accent:var(--rfmd);">
+      <div class="mark" aria-hidden="true">
+        <!-- a shield, dashed: guarded, not yet open -->
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".7" stroke-dasharray="4 4"/>
+          <circle cx="48" cy="30" r="3" fill="currentColor" stroke="none" opacity=".85"/>
+        </svg>
+      </div>
+      <p class="kicker">coming soon</p>
+      <h2>Unannounced</h2>
+      <p>Under Review.</p>
       <div class="go"><span>Not yet public</span></div>
     </div>
 
@@ -261,21 +283,6 @@ footer{
           <rect x="14" y="21" width="22" height="18" rx="9" opacity=".85"/>
           <rect x="37" y="21" width="22" height="18" rx="9" opacity=".55" stroke-dasharray="3.5 3.5"/>
           <rect x="60" y="21" width="22" height="18" rx="9" opacity=".85"/>
-        </svg>
-      </div>
-      <p class="kicker">coming soon</p>
-      <h2>Unannounced</h2>
-      <p>Under Review.</p>
-      <div class="go"><span>Not yet public</span></div>
-    </div>
-
-    <!-- 6b. Security-Constrained Diffusion Language Agents (coming soon, title not shown) -->
-    <div class="card locked" style="--accent:var(--rfmd);">
-      <div class="mark" aria-hidden="true">
-        <!-- a shield, dashed: guarded, not yet open -->
-        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".7" stroke-dasharray="4 4"/>
-          <circle cx="48" cy="30" r="3" fill="currentColor" stroke="none" opacity=".85"/>
         </svg>
       </div>
       <p class="kicker">coming soon</p>
