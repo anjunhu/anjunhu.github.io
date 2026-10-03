@@ -27,6 +27,7 @@
   --mids:#9B7EDE;   /* generative 3D scenes      */
   --advt:#D9645B;   /* adversarial               */
   --brdf:#E8A24E;   /* light / rendering         */
+  --coda:#6BBF7A;   /* constrained diffusion agents */
 
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
@@ -260,19 +261,25 @@ footer{
       </div>
     </div>
 
-    <!-- 6b. Security-Constrained Diffusion Language Agents (coming soon, title not shown) -->
-    <div class="card locked" style="--accent:var(--rfmd);">
+    <!-- 6b. CoDA: Security-Constrained Diffusion Language Agents -->
+    <div class="card multi" style="--accent:var(--coda);">
       <div class="mark" aria-hidden="true">
-        <!-- a shield, dashed: guarded, not yet open -->
+        <!-- a shield over a denoising sequence: policy enforced while the output forms -->
         <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".7" stroke-dasharray="4 4"/>
-          <circle cx="48" cy="30" r="3" fill="currentColor" stroke="none" opacity=".85"/>
+          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".85"/>
+          <path d="M40 31 l5.5 5.5 L57 25" opacity=".95"/>
+          <path d="M8 22 h12 M8 30 h9 M8 38 h12" opacity=".35" stroke-dasharray="2 3"/>
+          <path d="M76 22 h12 M79 30 h9 M76 38 h12" opacity=".75"/>
         </svg>
       </div>
-      <p class="kicker">coming soon</p>
-      <h2>Unannounced</h2>
-      <p>Under Review.</p>
-      <div class="go"><span>Not yet public</span></div>
+      <p class="kicker">2026</p>
+      <h2>Secure Workflows with Constrained Diffusion Agents</h2>
+      <p><b>CoDA</b>: diffusion language model agents that enforce task-level security policies while they denoise, so prompt injections cannot steer them into unauthorized tool calls</p>
+      <div class="go">
+        <a href="coda/">Project Page ↗</a>
+        <a href="https://github.com/anjunhu/CoDA" target="_blank" rel="noopener">Code ↗</a>
+        <a href="https://huggingface.co/spaces/anjunhu/cdllm-aa-replay" target="_blank" rel="noopener">Demo ↗</a>
+      </div>
     </div>
 
     <!-- 3b. Selective Watermark Tampering in Provenance Chains (coming soon, title not shown) -->
