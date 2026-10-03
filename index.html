@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><circle cx='16' cy='16' r='11' fill='none' stroke='%23E8A24E' stroke-width='2'/><circle cx='12' cy='12' r='3' fill='%23E8A24E'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0A0E14;
@@ -22,11 +22,15 @@
   /* one hue per project */
   --cacr:#5B9BD5;   /* multi-agent recsys risk   */
   --conn:#4FB3A8;   /* connectivity / mesh       */
-  --memo:#D46FA8;   /* diffusion memorization    */
+  --memo:#D46FA8;   /* diffusion memorisation    */
   --rfmd:#7A8798;   /* locked, deliberately mute */
   --mids:#9B7EDE;   /* generative 3D scenes      */
   --advt:#D9645B;   /* adversarial               */
+  --med:#E58E7A;    /* medical image analysis    */
+  --sport:#E6D25A;  /* sports video              */
+  --phys:#58C4DD;   /* physics / devices         */
   --brdf:#E8A24E;   /* light / rendering         */
+  --coda:#6BBF7A;   /* constrained diffusion agents */
 
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
@@ -61,9 +65,11 @@ body::after{background:var(--cacr);bottom:-28vmax;right:-20vmax;}
 }
 header{padding:64px 0 4px;}
 h1{
-  font-weight:500;
-  font-size:clamp(2.1rem,5.2vw,3.1rem);
-  letter-spacing:-.03em;
+  font-family:"Montserrat",var(--sans);
+  font-weight:600;
+  text-transform:uppercase;
+  font-size:clamp(1.5rem,4vw,2.4rem);
+  letter-spacing:.06em;
   margin:0;line-height:1.05;
 }
 .rule{
@@ -119,7 +125,7 @@ a.card:focus-visible{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--accent);}
 
 .kicker{
   font-family:var(--mono);font-weight:500;
-  font-size:.68rem;letter-spacing:.11em;text-transform:uppercase;
+  font-size:.72rem;letter-spacing:.03em;
   color:var(--accent);margin:0 0 7px;
 }
 h2{
@@ -148,6 +154,15 @@ a.card:hover .go .arrow{transform:translateX(4px);}
   color:var(--accent);border-bottom-color:color-mix(in srgb,var(--accent) 55%,transparent);
   outline:none;
 }
+
+.more{
+  font-family:"Montserrat",var(--sans);font-weight:600;
+  text-transform:uppercase;letter-spacing:.14em;
+  font-size:.82rem;color:var(--ink-2);
+  margin:64px 0 0;display:flex;align-items:center;gap:16px;
+}
+.more::after{content:"";flex:1;height:1px;background:var(--line);}
+.more + .cards{margin-top:22px;}
 
 footer{
   position:relative;z-index:1;
@@ -234,7 +249,7 @@ footer{
     <div class="card multi" style="--accent:var(--memo);">
       <div class="mark" aria-hidden="true">
         <!-- several diffusion models converging into two overlapping
-             memorized / unmemorized density curves, the detection problem -->
+             memorised / unmemorised density curves, the detection problem -->
         <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
           <rect x="6" y="7" width="17" height="13" rx="3" opacity=".8"/>
           <rect x="6" y="24" width="17" height="13" rx="3" opacity=".8"/>
@@ -252,27 +267,33 @@ footer{
           <circle cx="68" cy="25" r="1.8" fill="currentColor" stroke="none" opacity=".65"/>
         </svg>
       </div>
-      <p class="kicker">coming soon</p>
-      <h2>Reference-Free Memorization Detection</h2>
+      <p class="kicker">Under Review 2026</p>
+      <h2>Reference-Free Memorisation Detection</h2>
       <p>Under Review.</p>
       <div class="go">
         <a href="https://huggingface.co/spaces/anjunhu/rfmd-metric-inspector" target="_blank" rel="noopener">Demo ↗</a>
       </div>
     </div>
 
-    <!-- 6b. Security-Constrained Diffusion Language Agents (coming soon, title not shown) -->
-    <div class="card locked" style="--accent:var(--rfmd);">
+    <!-- 6b. CoDA: Security-Constrained Diffusion Language Agents -->
+    <div class="card multi" style="--accent:var(--coda);">
       <div class="mark" aria-hidden="true">
-        <!-- a shield, dashed: guarded, not yet open -->
+        <!-- a shield over a denoising sequence: policy enforced while the output forms -->
         <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".7" stroke-dasharray="4 4"/>
-          <circle cx="48" cy="30" r="3" fill="currentColor" stroke="none" opacity=".85"/>
+          <path d="M48 10 L68 18 V32 C68 43 59 50 48 54 C37 50 28 43 28 32 V18 Z" opacity=".85"/>
+          <path d="M40 31 l5.5 5.5 L57 25" opacity=".95"/>
+          <path d="M8 22 h12 M8 30 h9 M8 38 h12" opacity=".35" stroke-dasharray="2 3"/>
+          <path d="M76 22 h12 M79 30 h9 M76 38 h12" opacity=".75"/>
         </svg>
       </div>
-      <p class="kicker">coming soon</p>
-      <h2>Unannounced</h2>
-      <p>Under Review.</p>
-      <div class="go"><span>Not yet public</span></div>
+      <p class="kicker">Under Review 2026</p>
+      <h2>Secure Workflows with Constrained Diffusion Agents</h2>
+      <p><b>CoDA</b>: diffusion language model agents that enforce task-level security policies while they denoise, so prompt injections cannot steer them into unauthorised tool calls</p>
+      <div class="go">
+        <a href="coda/">Project Page ↗</a>
+        <a href="https://github.com/anjunhu/CoDA" target="_blank" rel="noopener">Code ↗</a>
+        <a href="https://huggingface.co/spaces/anjunhu/cdllm-aa-replay" target="_blank" rel="noopener">Demo ↗</a>
+      </div>
     </div>
 
     <!-- 3b. Selective Watermark Tampering in Provenance Chains (coming soon, title not shown) -->
@@ -285,7 +306,7 @@ footer{
           <rect x="60" y="21" width="22" height="18" rx="9" opacity=".85"/>
         </svg>
       </div>
-      <p class="kicker">coming soon</p>
+      <p class="kicker">Coming soon</p>
       <h2>Unannounced</h2>
       <p>Under Review.</p>
       <div class="go"><span>Not yet public</span></div>
@@ -382,6 +403,145 @@ footer{
     </a>
 
 
+  </div>
+
+  <h3 class="more">You may also like</h3>
+
+  <div class="cards cards-3">
+
+    <div class="card multi" style="--accent:var(--med);">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <ellipse cx="20" cy="30" rx="13" ry="16" opacity=".85"/>
+          <path d="M20 15 C16 22 24 26 20 32 C16 38 22 41 20 45" opacity=".3"/>
+          <circle cx="25" cy="25" r="3.2" fill="currentColor" stroke="none" opacity=".95"/>
+          <path d="M34 30 C42 30 44 17 55 17 M34 30 C42 30 44 43 55 43" opacity=".5"/>
+          <ellipse cx="70" cy="17" rx="14" ry="9" opacity=".85"/>
+          <path d="M60 17 q4 -5 8 0 t8 0 M62 21 q4 -4 8 0 t6 0" opacity=".45"/>
+          <ellipse cx="70" cy="43" rx="14" ry="9" opacity=".85" stroke-dasharray="3.5 3"/>
+          <circle cx="65" cy="42" r="3.4" fill="currentColor" stroke="none" opacity=".95"/>
+          <circle cx="74" cy="46" r="2.2" fill="currentColor" stroke="none" opacity=".65"/>
+        </svg>
+      </div>
+      <p class="kicker">ML4H 2022 · Med-NeurIPS 2022</p>
+      <h2>Pathology–Anatomy Disentanglement in Brain MRI</h2>
+      <p>Structured variational priors that separate pathology from healthy anatomy in patient brain MRI, in a clinically plausible way.</p>
+      <div class="go">
+        <a href="https://arxiv.org/abs/2211.15564" target="_blank" rel="noopener">ML4H arXiv ↗</a>
+        <a href="http://www.cse.cuhk.edu.hk/~qdou/public/medneurips2022/59.pdf" target="_blank" rel="noopener">Med-NeurIPS Paper ↗</a>
+      </div>
+    </div>
+
+    <div class="card" style="--accent:var(--med);">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <ellipse cx="22" cy="35" rx="13" ry="16" opacity=".85"/>
+          <circle cx="26" cy="31" r="4" fill="currentColor" stroke="none" opacity=".95"/>
+          <ellipse cx="74" cy="35" rx="13" ry="16" opacity=".55" stroke-dasharray="4 3.5"/>
+          <circle cx="78" cy="31" r="4" opacity=".6" stroke-dasharray="2 2.5"/>
+          <path d="M30 17 Q48 0 66 17" opacity=".9"/>
+          <path d="M60 12.5 L66 17 L58.5 19" opacity=".9"/>
+          <path d="M38 48 H58" opacity=".3"/>
+          <circle cx="54" cy="48" r="3.2" fill="currentColor" stroke="none" opacity=".9"/>
+        </svg>
+      </div>
+      <p class="kicker">MIABID @ MICCAI 2022</p>
+      <h2>Counterfactual Medical Image Synthesis</h2>
+      <p>Generating counterfactual scans to discover personalised predictive image markers of disease.</p>
+      <div class="go">
+        <span>No link yet</span>
+      </div>
+    </div>
+
+    <div class="card multi" style="--accent:var(--med);">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <ellipse cx="22" cy="30" rx="19" ry="22" opacity=".85"/>
+          <path d="M22 9 C18 18 26 23 22 31 C18 39 25 44 22 51" opacity=".25"/>
+          <circle cx="14" cy="23" r="3.2" fill="currentColor" stroke="none" opacity=".95"/>
+          <circle cx="31" cy="32" r="2.4" fill="currentColor" stroke="none" opacity=".7"/>
+          <circle cx="17" cy="39" r="1.8" fill="currentColor" stroke="none" opacity=".55"/>
+        </svg>
+      </div>
+      <p class="kicker">MSSEG-2 @ MICCAI 2021</p>
+      <h2>Multiple Sclerosis Lesion Segmentation</h2>
+      <p>Consensus learning from multi-rater labels for segmenting and detecting new lesions in brain MRI.</p>
+      <div class="go">
+        <a href="https://hal.inria.fr/hal-03358968" target="_blank" rel="noopener">Paper ↗</a>
+        <a href="https://hal.inria.fr/hal-03358968/file/MSSEG_Challenge_Proceedings.pdf" target="_blank" rel="noopener">Proceedings PDF ↗</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="cards cards-3">
+
+    <div class="card multi" style="--accent:var(--phys);">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path d="M4 30 H24" opacity=".9"/>
+          <path d="M24 18 V42" opacity=".95"/>
+          <path d="M31 18 V25.5 M31 26.5 V33.5 M31 34.5 V42" opacity=".95"/>
+          <path d="M31 21.5 H48 V9 M31 38.5 H48 V51" opacity=".9"/>
+          <path d="M31 30 H42 M38.5 27 L42 30 L38.5 33" opacity=".7"/>
+          <circle cx="48" cy="9" r="1.8" fill="currentColor" stroke="none"/>
+          <circle cx="48" cy="51" r="1.8" fill="currentColor" stroke="none"/>
+          <path d="M68.1 15.0 L74.2 18.5 L74.2 25.5 L68.1 29.0 L62.0 25.5 L62.0 18.5 Z" opacity=".6"/><path d="M80.2 15.0 L86.3 18.5 L86.3 25.5 L80.2 29.0 L74.1 25.5 L74.1 18.5 Z" opacity=".6"/><path d="M74.2 25.5 L80.3 29.0 L80.3 36.0 L74.2 39.5 L68.1 36.0 L68.1 29.0 Z" opacity=".85"/><path d="M62.0 25.5 L68.1 29.0 L68.1 36.0 L62.0 39.5 L55.9 36.0 L55.9 29.0 Z" opacity=".35"/><path d="M86.3 25.5 L92.4 29.0 L92.4 36.0 L86.3 39.5 L80.2 36.0 L80.2 29.0 Z" opacity=".35"/>
+          <path d="M50 30 H60" opacity=".35" stroke-dasharray="2 3"/>
+        </svg>
+      </div>
+      <p class="kicker">Nanotechnology 2020</p>
+      <h2>Graphene FET Scaling for Ultra Low Noise Sensors</h2>
+      <p>Scaling the active area cuts 1/f noise by more than five orders of magnitude, enabling a sulfate ion sensor with record resolution.</p>
+      <div class="go">
+        <a href="https://doi.org/10.1088/1361-6528/abc0c8" target="_blank" rel="noopener">Paper ↗</a>
+      </div>
+    </div>
+
+    <div class="card multi" style="--accent:var(--phys);">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <rect x="12" y="23" width="11" height="16" fill="currentColor" stroke="none" opacity=".62"/>
+          <rect x="23" y="23" width="11" height="16" fill="currentColor" stroke="none" opacity=".45"/>
+          <rect x="34" y="23" width="11" height="16" fill="currentColor" stroke="none" opacity=".28"/>
+          <rect x="45" y="23" width="11" height="16" fill="currentColor" stroke="none" opacity=".14"/>
+          <rect x="12" y="23" width="44" height="16" rx="3" opacity=".85"/>
+          <path d="M16 18 C14 15 18 12 16 8 M23 18 C21 15 25 12 23 8" opacity=".9"/>
+          <path d="M12 47 H56 M51 44 L56 47 L51 50" opacity=".6"/>
+          <path d="M56 31 H62" opacity=".6"/>
+          <path d="M62 31 H92" opacity=".25" stroke-dasharray="2 3"/>
+          <path d="M62 31 l3 -7 3 12 3 -15 3 13 3 -9 3 8 3 -10 3 7 3 -5 2 3" opacity=".9"/>
+        </svg>
+      </div>
+      <p class="kicker">Europhysics Letters 2023</p>
+      <h2>Fluctuation-Dissipation in Thermoelectric Sensors</h2>
+      <p>Noise characterisation linking fluctuations and dissipation in thermoelectric devices.</p>
+      <div class="go">
+        <a href="https://iopscience.iop.org/article/10.1209/0295-5075/acb009/pdf" target="_blank" rel="noopener">Paper ↗</a>
+      </div>
+    </div>
+
+
+    <div class="card multi" style="--accent:var(--sport);">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 96 60" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <circle cx="22" cy="12" r="4" opacity=".9"/>
+          <path d="M22 16 V33 M22 21 L12 28 M22 21 L33 25 M22 33 L15 49 M22 33 L30 49" opacity=".85"/>
+          <circle cx="74" cy="12" r="4" opacity=".9"/>
+          <path d="M74 16 V33 M74 21 L84 28 M74 21 L63 25 M74 33 L81 49 M74 33 L66 49" opacity=".85"/>
+          <path d="M33 25 Q48 8 63 25" opacity=".6" stroke-dasharray="3 3"/>
+          <circle cx="33" cy="25" r="2" fill="currentColor" stroke="none"/>
+          <circle cx="63" cy="25" r="2" fill="currentColor" stroke="none"/>
+          <circle cx="48" cy="16.5" r="2.4" fill="currentColor" stroke="none" opacity=".8"/>
+        </svg>
+      </div>
+      <p class="kicker">CVsports @ CVPR 2024</p>
+      <h2>Video Interaction Recognition</h2>
+      <p>An attention-augmented relational network over skeleton data for recognising player interactions in sports video.</p>
+      <div class="go">
+        <a href="https://openaccess.thecvf.com/content/CVPR2024W/CVsports/html/Askari_Video_Interaction_Recognition_using_an_Attention_Augmented_Relational_Network_and_CVPRW_2024_paper.html" target="_blank" rel="noopener">Paper ↗</a>
+      </div>
+    </div>
   </div>
 
   </main>
