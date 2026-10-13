@@ -30,14 +30,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="css/figs.css?v=3">
+    <link rel="stylesheet" href="css/figs.css?v=5">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
 
     <script src="js/app.js"></script>
-    <script src="js/figs.js?v=6"></script>
+    <script src="js/figs.js?v=9"></script>
 
     <style>
         .trigger { font-family: Menlo, Consolas, monospace; font-size: 13px; background: #f7f7f7;
@@ -69,6 +69,8 @@
         p, td, th, li { font-size: 15px; line-height: 1.6; }
         h2 { font-weight: 400; }
         h3 { font-weight: 500; }
+        h4 { font-weight: 500; margin-top: 18px; }
+        .policy-json { font-family: Menlo, Consolas, monospace; font-size: 12.5px; background: #f7f7f7; border: 1px solid #e3e3e3; }
     </style>
 </head>
 
@@ -130,9 +132,14 @@ As agentic AI systems take on increasingly complex and consequential tasks, secu
                 <div class="form-group col-md-10 col-md-offset-1">
                     <textarea id="bibtex" class="form-control" readonly>
 @article{coda2026,
-    title={Only What You've Signed up For: Secure Workflows
-           with Constrained Diffusion Agents},
-    year={2026}
+    title   = {Only What You've Signed up For: Secure Workflows
+               with Constrained Diffusion Agents},
+    author  = {Hu, Anjun and Cardei, Michael and Ma, Chenrui and
+               Pinto, Francesco and Sitawarin, Chawin and Fioretto, Ferdinando},
+    journal = {arXiv preprint},
+    year    = {2026},
+    note    = {Code: https://github.com/anjunhu/CoDA.
+               Project page: https://anjunhu.github.io/coda/}
 }</textarea>
                 </div>
             </div>
@@ -149,6 +156,7 @@ As agentic AI systems take on increasingly complex and consequential tasks, secu
                     <br><br>
                     Diffusion language models draft the entire output at once and refine it over many steps. Every step is a chance to look at the whole provisional action (which tool, which recipient, which URL) and correct it before anything is committed. CoDA uses those steps to enforce a policy, rather than trying to spot the attack.
                 </p>
+                <div id="fig5" class="fig"><noscript><p>With left-to-right decoding the recipient is committed before the message body exists, so a rule that links the two fields fires too late. A diffusion agent drafts both fields together and the policy corrects the recipient before anything is committed.</p></noscript></div>
             </div>
         </div>
 
@@ -175,6 +183,26 @@ As agentic AI systems take on increasingly complex and consequential tasks, secu
                     <tr><td>Entity provenance</td><td>Outputs cannot introduce entities supported only by untrusted text, such as reviews.</td></tr>
                     <tr><td>Information flow</td><td>Protected content cannot be copied into outbound messages.</td></tr>
                 </table>
+                <p class="text-justify">
+                    Authorized values often span several tokens. Constraining each position independently would let pieces of different allowed values recombine into one nobody authorized, so CoDA constrains multi-token spans with a prefix trie over the allowed set:
+                </p>
+                <div id="fig6" class="fig"><noscript><p>Masking positions independently lets "Al" + "ob" form "Alob". CoDA walks a prefix trie, so after "Al" only "ice" is allowed.</p></noscript></div>
+                <h4>Where do policies come from?</h4>
+                <p class="text-justify">
+                    A policy is compiled once from the trusted user prompt, before any tool output is read. We evaluate two sources. <em>Oracle</em> policies are hand-verified per task and give an upper bound that isolates enforcement from specification. <em>Synthesized</em> policies come from a single zero-shot call to an off-the-shelf LLM, constrained to a JSON schema, with no prompt tuning:
+                </p>
+<pre class="policy-json">{ "modes": ["tool_t", "arg_t"],
+  "allowed_tools": ["read_file", "update_user_info"],
+  "rationale": "..." }</pre>
+                <table class="table">
+                    <tr><th>Policy model</th><th>Latency per task</th><th>Cost per task</th></tr>
+                    <tr><td>Gemini 3.7 Flash</td><td>6.3 s</td><td>$0.008</td></tr>
+                    <tr><td>GPT-5.6 Sol</td><td>5.4 s</td><td>$0.012</td></tr>
+                    <tr><td>Claude Opus 5</td><td>8.9 s</td><td>$0.040</td></tr>
+                </table>
+                <p class="text-justify">
+                    The policy model never sees the injected content. A wrong policy can over- or under-restrict the agent, but the attacker cannot steer it.
+                </p>
             </div>
         </div>
 
@@ -293,6 +321,10 @@ As agentic AI systems take on increasingly complex and consequential tasks, secu
                 </p>
                 <div id="fig4" class="fig"></div>
                 <p class="text-center"><small>Under adaptive attack: attack success rate (ASR, red, lower is better) and utility (teal, higher is better) in %, and average model calls per scenario. Bold marks the best value per suite. Hover a row for exact values and time.</small></p>
+                <p class="text-justify">
+                    Why project at every step rather than once at the end? The Last-Step ablation applies the same Oracle policy as a post-hoc overwrite. The constrained span is fixed, but the rest of the call was written around the old value and never gets a chance to adapt:
+                </p>
+                <div id="fig7" class="fig"><noscript><p>Projecting at every step: Slack utility 66.7%, Banking 44.4%. Last step only: Slack 35.5% with 1.6% ASR, Banking 0.0%.</p></noscript></div>
             </div>
         </div>
 
@@ -317,6 +349,24 @@ As agentic AI systems take on increasingly complex and consequential tasks, secu
                 </div>
                 <p class="text-justify">
                     The <a href="https://huggingface.co/spaces/anjunhu/cdllm-aa-replay">demo</a> steps through runs like this one: each mutated trigger, the agent's transcript, the critic's score and critique, and where each policy stops the attack.
+                </p>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Limitations
+                </h3>
+                <ul>
+                    <li><b>Runtime argument discovery.</b> When the value a task needs lives in untrusted data ("pay the IBAN in invoice.txt"), a policy cannot fix it in advance. This is the main source of the Banking utility trade-off and of the residual ASR with synthesized policies.</li>
+                    <li><b>Open-ended semantics.</b> Tries and allowlists capture structure, not meaning. Constraints like "keep the tone polite" need additional checks on free text.</li>
+                    <li><b>Multi-turn intent drift.</b> The policy is fixed at the first turn. Safely re-synthesizing it when the user changes their mind is open.</li>
+                </ul>
+                <p class="text-justify">
+                    Enforcement is exact once a policy is given; the open problem is writing the policy.
                 </p>
             </div>
         </div>

